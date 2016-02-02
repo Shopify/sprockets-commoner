@@ -1,0 +1,11 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+/test/fixtures/node_modules
+npm-debug.log

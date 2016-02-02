@@ -1,0 +1,1 @@
+__babel_node_module__info_json;

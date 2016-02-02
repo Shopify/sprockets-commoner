@@ -1,0 +1,10 @@
+#!/bin/bash
+set -ex
+
+bundle install
+pushd ./babel-plugin-rewire-require
+npm install 
+popd
+pushd ./test/fixtures
+npm install
+popd
