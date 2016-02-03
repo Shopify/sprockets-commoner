@@ -1,0 +1,13 @@
+machine:
+  node:
+    version: v5.5.0
+  ruby:
+    version: 2.2.2
+
+dependencies:
+  override:
+    - script/setup
+
+test:
+  override:
+    - script/test

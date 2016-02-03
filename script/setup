@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ex
 
+gem install bundler
 bundle install
 pushd ./babel-plugin-rewire-require
 npm install 
