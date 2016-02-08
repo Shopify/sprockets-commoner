@@ -1,6 +1,3 @@
 #!/bin/bash
 set -e -x
 bundle exec rake test
-pushd babel-plugin-rewire-require
-npm test
-popd

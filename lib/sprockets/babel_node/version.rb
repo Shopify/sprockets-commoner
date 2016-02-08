@@ -1,5 +1,5 @@
 module Sprockets
-  class BabelNode
+  module BabelNode
     VERSION = "0.0.1".freeze
   end
 end
