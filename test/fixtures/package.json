@@ -1,6 +1,7 @@
 {
   "private": true,
   "dependencies": {
-    "babel-core": "latest"
+    "babel-core": "latest",
+    "babel-preset-es2015": "latest"
   }
 }

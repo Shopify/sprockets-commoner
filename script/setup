@@ -4,8 +4,5 @@ set -ex
 gem install bundler
 bundle install
 pushd ./test/fixtures
-npm install
-popd
-pushd ./test/fixtures/arrow
-npm install
+npm install --no-progress
 popd
