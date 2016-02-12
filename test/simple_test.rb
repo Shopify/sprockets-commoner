@@ -6,22 +6,12 @@ class SimpleTest < MiniTest::Test
     @env.append_path File.join(__dir__, 'fixtures')
   end
 
-  def test_load_file
-    assert asset = @env['arrow.js']
-    assert_equal <<-JS.chomp, asset.to_s
+  def test_no_rewire
+    assert asset = @env['no-rewire.js']
+    assert_equal <<-JS.chomp, asset.to_s.chomp
 "use strict";
 
-var a = function a(x) {
-  return x * x;
-};
-    JS
-  end
-
-  def test_no_babel
-    assert asset = @env['nobabelrc.js']
-    assert_equal <<-JS.chomp, asset.to_s
-const a = (x) => x * x;
-
-    JS
+var a = 1;
+JS
   end
 end

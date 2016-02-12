@@ -1,0 +1,2 @@
+require('./class');
+require('./assign');

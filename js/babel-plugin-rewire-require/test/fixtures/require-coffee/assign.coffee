@@ -1,0 +1,1 @@
+window.Assigned = 123;
