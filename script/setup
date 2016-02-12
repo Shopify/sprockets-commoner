@@ -1,8 +1,11 @@
 #!/bin/bash
-set -ex
+set -euo pipefail
 
-gem install bundler
-bundle install
-pushd ./test/fixtures
-npm install --no-progress
-popd
+gem install bundler --version '1.11.2'
+bundle check || bundle install -j 4
+
+for path in "./test/fixtures" "./test/fixtures/vendor-stub" "./js/babel-plugin-rewire-require"; do
+  pushd "$path" >/dev/null
+  npm install --no-progress
+  popd >/dev/null
+done
