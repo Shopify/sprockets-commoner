@@ -2,7 +2,6 @@
   "name": "vendors-stub",
   "private": true,
   "dependencies": {
-    "jquery": "^2.2.0",
-    "lodash": "^4.5.0"
+    "jquery": "^2.2.0"
   }
 }

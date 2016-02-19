@@ -59,4 +59,12 @@ It just sets up a namespace for a module and then calls it.
 
 * Stubbing doesn't work. It does its thing, but the plugin is not aware that a file will not be included, so any module that imports that file . Ideally we could have some sort of way to import libraries in one file and have them exported to the global object, and then be able to use the knowledge of which files are exported in this way to reference those in another file. For now you need to use the `globals` option to manually fill in any dependencies you know are being stubbed.
 
+* It's still unclear how the inclusion/configuration of rewire-require should work. There's a couple of options (currently option 3 is implemented):
+
+  * Always include rewire-require for any `.js` file. This issue with this is that we can't configure anything in `.babelrc`, so we can't set globals, unless we have a 'global globals' but that won't work for all projects. The upshot is that we can easily communicate any Sprockets variables, like the paths.
+
+  * Put rewire-require in `.babelrc`. The issue with this is that it could potentially be overwritten and thus excluded by any `.babelrc` that a `node_modules` module has. We could get around this by just always including `rewire-require` for any file under `node_modules`. The downside to putting it in `.babelrc` is that we can't communicate any Sprockets information like the Sprockets paths.
+
+  * A third option would be to still define it in `.babelrc`, but to have a second plugin that's always included that injects the configuration from Sprockets. This way we can specify some config options from `.babelrc` and some from Sprockets. `rewire-require` then looks through the plugins and finds this special plugin. It then merges whatever options are on the special plugin with its own options.
+
 * We can optimise `typeof module === "object" && typeof module.exports === "object"` to make UMD (like jQuery, React, basically any big JS library) slightly smaller.

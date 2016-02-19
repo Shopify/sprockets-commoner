@@ -2,31 +2,23 @@
 
 ## Usage
 
-`babel-plugin-rewire-require` accepts the following options:
+`babel-plugin-rewire-require` should be included in your `.babelrc` by adding `rewire-require`. You can't install it through npm, but this directory is automatically added to the path by the Sprockets plugin.
 
-* `rootDir` the directory where all modules should be under. If a module is required outside rootDir, an error is thrown. This option also makes all the paths emitted in require functions relative to the directory.
-* Any of the options specified in [resolve](https://github.com/substack/node-resolve#resolvesyncid-opts).
+## Options
 
-### Via `.babelrc` (Recommended)
+* `globals`: A mapping of module name to global variable name, which will ovveride any import of that package with a global variable reference.
 
-**.babelrc**
+## Example
 
 ```json
 {
-  "plugins": [["rewire-require", {"extensions": [".js", ".json", ".es6"]}]]
+  presets: ["es2015"],
+  plugins: [
+    ["rewire-require", {
+      globals: {
+        "jquery": "$"
+      }
+    }]
+  ]
 }
-```
-
-### Via CLI
-
-```sh
-$ babel --plugins rewire-require script.js
-```
-
-### Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["rewire-require"]
-});
 ```

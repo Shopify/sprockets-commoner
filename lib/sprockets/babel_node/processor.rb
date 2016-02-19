@@ -115,6 +115,16 @@ module Sprockets
             'filename' => input[:filename],
             'filenameRelative' => PathUtils.split_subpath(input[:load_path], input[:filename]),
             'moduleRoot' => nil,
+            'plugins' => [
+              ['rewire-require-options', {
+                # rewire-require looks for this property to copy options over from
+                # This makes it possible for Sprockets to pass on options to rewire-require, while also having options in .babelrc
+                # rewire-require does a shallow merge of what is defined in .babelrc and what is defined here
+                # In the future (Sprockets 4 probably) we can also use this to pass on extensions
+                __rewire_require_options: true,
+                paths: @env.paths,
+              }],
+            ],
             'sourceRoot' => @env.root,
           }
         end
