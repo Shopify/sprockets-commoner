@@ -1,37 +1,30 @@
+require 'schmooze'
 require 'open3'
 
 module Sprockets
   module BabelNode
-    class Processor
-      Error = Class.new(::Sprockets::Error)
-
-      PROCESSOR_PATH = File.join(__dir__, 'processor.js')
+    class Processor < Schmooze::Base
       BABELRC_FILE = '.babelrc'.freeze
       PACKAGE_JSON = 'package.json'.freeze
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
       ALLOWED_EXTENSIONS = /\.js(?:\.erb)?\z/
 
-      def self.instance(environment)
-        @instance ||= new(environment)
-      end
+      dependencies babel: 'babel-core', t: 'babel-types'
+
+      method :version, 'function() { return [process.version, babel.version]; }'
+      method :transform, 'babel.transform'
 
       def self.call(input)
-        instance(input[:environment]).call(input)
+        @instance ||= new(input[:environment].root)
+        @instance.call(input)
       end
 
-      def initialize(environment)
-        @stdin, @stdout, @stderr, @wait_thr = Open3.popen3(
-          {"NODE_PATH" => JS_PACKAGE_PATH},
-          'node',
-          '-e',
-          File.read(PROCESSOR_PATH),
-          chdir: environment.root
-        )
-        msg = message('version')
+      def initialize(root)
+        super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
+
         @cache_key = [
           self.class.name,
-          msg['nodeVersion'],
-          msg['babelVersion'],
+          version,
           VERSION,
         ].freeze
       end
@@ -46,10 +39,7 @@ module Sprockets
         @dependencies = Set.new(input[:metadata][:dependencies])
 
         result = input[:cache].fetch([@cache_key, input[:data], babel_config]) do
-          message('transform', {
-            'data' => input[:data],
-            'options' => options(input),
-          })
+          transform(input[:data], options(input))
         end
 
         if result['metadata'].has_key?('requires')
@@ -89,23 +79,6 @@ module Sprockets
           return JSON.parse(File.read(filename))['babel']
         rescue
           return nil
-        end
-
-        def message(method, data={})
-          @stdin.puts JSON.dump({'method' => method}.merge(data))
-          input = @stdout.gets
-          if input.nil?
-            raise Errno::EPIPE, "Can't read from stdout"
-          end
-          status, return_value = JSON.parse(input)
-          if status == 'ok'
-            return_value
-          else
-            raise Sprockets::Error, return_value
-          end
-        rescue Errno::EPIPE
-          self.class.instance_variable_set(:@instance, nil)
-          raise Error, @stderr.read
         end
 
         def options(input)
