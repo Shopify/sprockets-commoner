@@ -1,0 +1,7 @@
+{
+  "name": "vendors-stub",
+  "private": true,
+  "dependencies": {
+    "jquery": "^2.2.0"
+  }
+}
