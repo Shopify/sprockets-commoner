@@ -9,7 +9,7 @@ module Sprockets
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
       ALLOWED_EXTENSIONS = /\.js(?:\.erb)?\z/
 
-      dependencies babel: 'babel-core', t: 'babel-types'
+      dependencies babel: 'babel-core'
 
       method :version, 'function() { return [process.version, babel.version]; }'
       method :transform, 'babel.transform'
