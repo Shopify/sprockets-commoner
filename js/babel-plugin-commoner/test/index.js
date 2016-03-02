@@ -2,7 +2,7 @@ var path    = require('path');
 var fs      = require('fs');
 var assert  = require('assert');
 var babel   = require('babel-core');
-var optionsPlugin = require('../../babel-plugin-rewire-require-options');
+var optionsPlugin = require('../../babel-plugin-commoner-options');
 
 function trim(str) {
   return str.replace(/^\s+|\s+$/, '');
@@ -17,7 +17,7 @@ describe('babel-plugin-transform-dev', function() {
     var optionsPath = path.join(fixtureDir, 'options.js');
     var options     = require(optionsPath, 'utf8');
     if (options.options != null) {
-      options.options.__rewire_require_options = true;
+      options.options.__commoner_options = true;
     }
 
     var actualPath    = path.join(fixtureDir, 'actual.js');
@@ -45,7 +45,7 @@ describe('babel-plugin-transform-dev', function() {
     var optionsPath = path.join(errorDir, 'options.js');
     var options     = require(optionsPath, 'utf8');
     if (options.options != null) {
-      options.options.__rewire_require_options = true;
+      options.options.__commoner_options = true;
     }
 
     var actualPath    = path.join(errorDir, 'actual.js');

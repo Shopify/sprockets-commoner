@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-rewire-require-options",
+  "name": "babel-plugin-commoner-options",
   "description": "A bogus plugin used for receiving options from Sprockets",
   "private": true
 }

@@ -1,8 +1,8 @@
-# babel-plugin-rewire-require
+# babel-plugin-commoner
 
 ## Usage
 
-`babel-plugin-rewire-require` should be included in your `.babelrc` by adding `rewire-require`. You can't install it through npm, but this directory is automatically added to the path by the Sprockets plugin.
+`babel-plugin-commoner` should be included in your `.babelrc` by adding `commoner`. You can't install it through npm, but this directory is automatically added to the path by the Sprockets plugin.
 
 ## Options
 
@@ -14,7 +14,7 @@
 {
   presets: ["es2015"],
   plugins: [
-    ["rewire-require", {
+    ["commoner", {
       globals: {
         "jquery": "$"
       }

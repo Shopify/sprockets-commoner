@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-rewire-require",
+  "name": "babel-plugin-commoner",
   "private": true,
   "description": "Find require calls and resolve the library they're calling.",
   "scripts": {

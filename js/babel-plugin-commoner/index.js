@@ -139,7 +139,7 @@ module.exports = (context) => {
     visitor: {
       Program: {
         exit(path, state) {
-          // Get options from rewire-require-options and merge them with the options
+          // Get options from commoner-options and merge them with the options
           // that were passed to this plugin in .babelrc
           opts = Object.assign(
             {
@@ -155,13 +155,13 @@ module.exports = (context) => {
             state.opts,
             ...state.file.opts.plugins
               .map((plugin) => plugin[1])
-              .filter((opts) => opts != null && opts.__rewire_require_options)
+              .filter((opts) => opts != null && opts.__commoner_options)
           );
           opts.basedir = dirname(state.file.opts.filename);
 
-          // Find rewire-require-options and copy its options into ours
+          // Find commoner-options and copy its options into ours
           // Signal back to Sprockets that we're rewiring
-          state.file.metadata.rewireRequireEnabled = true;
+          state.file.metadata.commonerEnabled = true;
 
           const node = path.node;
           const regex = rootRegex(state);

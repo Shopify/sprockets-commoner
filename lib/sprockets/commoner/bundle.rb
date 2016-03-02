@@ -40,7 +40,7 @@ JS
       end
 
       def call(input)
-        return unless input[:metadata][:rewire_require_enabled]
+        return unless input[:metadata][:commoner_enabled]
 
         used_helpers = input[:metadata][:commoner_used_helpers]
         helpers = generate_helpers(used_helpers.to_a)
