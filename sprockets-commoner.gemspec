@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'sprockets/babel_node/version'
+require 'sprockets/commoner/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "sprockets-babel_node"
-  spec.version       = Sprockets::BabelNode::VERSION
+  spec.name          = "sprockets-commoner"
+  spec.version       = Sprockets::Commoner::VERSION
   spec.authors       = ["Bouke van der Bijl"]
   spec.email         = ["boukevanderbijl@gmail.com"]
 
   spec.summary       = %q{Use Babel in Sprockets in an idiomatic way}
-  spec.description = %q{Sprockets::BabelNode uses the schmooze gem to compile ES2015+ files to ES5 using Babel directly from NPM, without vendoring it.}
+  spec.description = %q{Sprockets::Commoner uses the schmooze gem to compile ES2015+ files to ES5 using Babel directly from NPM, without vendoring it.}
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.

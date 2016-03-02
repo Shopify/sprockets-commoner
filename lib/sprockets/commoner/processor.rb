@@ -2,7 +2,7 @@ require 'schmooze'
 require 'open3'
 
 module Sprockets
-  module BabelNode
+  module Commoner
     class Processor < Schmooze::Base
       BABELRC_FILE = '.babelrc'.freeze
       PACKAGE_JSON = 'package.json'.freeze
@@ -54,7 +54,7 @@ module Sprockets
           dependencies: @dependencies,
           required: @required,
 
-          babel_node_used_helpers: Set.new(input[:metadata][:babel_node_used_helpers]) + result['metadata']['usedHelpers'],
+          commoner_used_helpers: Set.new(input[:metadata][:commoner_used_helpers]) + result['metadata']['usedHelpers'],
           rewire_require_enabled: input[:metadata][:rewire_require_enabled] | result['metadata']['rewireRequireEnabled'],
         }
       end

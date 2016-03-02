@@ -19,7 +19,7 @@ function escapePath(path) {
       return '_';
     }
   });
-  return `__babel_node_module__${escapedPath}`;
+  return `__commoner_module__${escapedPath}`;
 }
 
 function addRequire(state, path) {
@@ -134,7 +134,7 @@ module.exports = (context) => {
     inherits: require(resolve('babel-plugin-transform-es2015-modules-commonjs', {basedir: process.cwd()})),
     pre(file) {
       // The actual helpers are generated in babel.rb
-      file.set("helperGenerator", (name) => t.identifier(`__babel_node_helper__${name}`));
+      file.set("helperGenerator", (name) => t.identifier(`__commoner_helper__${name}`));
     },
     visitor: {
       Program: {
@@ -178,7 +178,7 @@ module.exports = (context) => {
             [t.variableDeclarator(
               t.identifier(identifier),
               t.callExpression(
-                t.identifier('__babel_node_initialize_module__'),
+                t.identifier('__commoner_initialize_module__'),
                 [t.functionExpression(
                   null,
                   [t.identifier('module'), t.identifier('exports')],

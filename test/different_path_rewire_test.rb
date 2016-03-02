@@ -10,21 +10,21 @@ class DifferentPathRewireTest < MiniTest::Test
     assert asset = @env['absolute.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
 !function() {
-var __babel_node_initialize_module__ = function(f) {
+var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
 
-var __babel_node_module__different_path$absolute$second_js = __babel_node_initialize_module__(function (module, exports) {
+var __commoner_module__different_path$absolute$second_js = __commoner_initialize_module__(function (module, exports) {
   "use strict";
 
   console.log(1);
 });
-var __babel_node_module__different_path$absolute$index_js = __babel_node_initialize_module__(function (module, exports) {
+var __commoner_module__different_path$absolute$index_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
-  __babel_node_module__different_path$absolute$second_js;
+  __commoner_module__different_path$absolute$second_js;
 
 
   console.log(2);

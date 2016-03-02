@@ -10,12 +10,12 @@ class RewireTest < MiniTest::Test
     assert asset = @env['scripts']
     assert_equal <<-JS.chomp, asset.to_s.chomp
 !function() {
-var __babel_node_initialize_module__ = function(f) {
+var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var __babel_node_helper__createClass = function () {
+var __commoner_helper__createClass = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -32,17 +32,17 @@ var __babel_node_helper__createClass = function () {
     return Constructor;
   };
 }(),
-    __babel_node_helper__classCallCheck = function (instance, Constructor) {
+    __commoner_helper__classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 },
-    __babel_node_helper__interopRequireDefault = function (obj) {
+    __commoner_helper__interopRequireDefault = function (obj) {
   return obj && obj.__esModule ? obj : {
     default: obj
   };
 };
-var __babel_node_module__scripts$module_js = __babel_node_initialize_module__(function (module, exports) {
+var __commoner_module__scripts$module_js = __commoner_initialize_module__(function (module, exports) {
   "use strict";
 
   Object.defineProperty(exports, "__esModule", {
@@ -51,10 +51,10 @@ var __babel_node_module__scripts$module_js = __babel_node_initialize_module__(fu
 
   var Neato = function () {
     function Neato() {
-      __babel_node_helper__classCallCheck(this, Neato);
+      __commoner_helper__classCallCheck(this, Neato);
     }
 
-    __babel_node_helper__createClass(Neato, [{
+    __commoner_helper__createClass(Neato, [{
       key: "whatever",
       value: function whatever() {
         return 3;
@@ -66,7 +66,7 @@ var __babel_node_module__scripts$module_js = __babel_node_initialize_module__(fu
 
   exports.default = Neato;
 });
-var __babel_node_module__scripts$index_js = __babel_node_initialize_module__(function (module, exports) {
+var __commoner_module__scripts$index_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -79,9 +79,9 @@ var __babel_node_module__scripts$index_js = __babel_node_initialize_module__(fun
     return b.whatever();
   };
 
-  var _module = __babel_node_module__scripts$module_js;
+  var _module = __commoner_module__scripts$module_js;
 
-  var _module2 = __babel_node_helper__interopRequireDefault(_module);
+  var _module2 = __commoner_helper__interopRequireDefault(_module);
 });
 }();
     JS
@@ -91,12 +91,12 @@ var __babel_node_module__scripts$index_js = __babel_node_initialize_module__(fun
     assert asset = @env['arrow.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
 !function() {
-var __babel_node_initialize_module__ = function(f) {
+var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var __babel_node_helper__interopRequireDefault = function (obj) {
+var __commoner_helper__interopRequireDefault = function (obj) {
   return obj && obj.__esModule ? obj : {
     default: obj
   };
@@ -105,23 +105,23 @@ var __babel_node_helper__interopRequireDefault = function (obj) {
   window.Whatever = 2;
 
 }).call(this);
-var __babel_node_module__arrow$second_js = __babel_node_initialize_module__(function (module, exports) {
+var __commoner_module__arrow$second_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
   var _extra = window.Whatever;
 
-  var _extra2 = __babel_node_helper__interopRequireDefault(_extra);
+  var _extra2 = __commoner_helper__interopRequireDefault(_extra);
 
   console.log(_extra2.default);
 });
-var __babel_node_module__arrow$index_js = __babel_node_initialize_module__(function (module, exports) {
+var __commoner_module__arrow$index_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
   var _extra = window.Whatever;
 
-  var _extra2 = __babel_node_helper__interopRequireDefault(_extra);
+  var _extra2 = __commoner_helper__interopRequireDefault(_extra);
 
-  __babel_node_module__arrow$second_js;
+  __commoner_module__arrow$second_js;
 
 
   var a = function a(x) {
@@ -145,13 +145,13 @@ JS
     assert asset = @env['coffee-first.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
 !function() {
-var __babel_node_initialize_module__ = function(f) {
+var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
 
-var __babel_node_module__coffee_first$included_js = __babel_node_initialize_module__(function (module, exports) {
+var __commoner_module__coffee_first$included_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
