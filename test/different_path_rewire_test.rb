@@ -15,6 +15,7 @@ var __commoner_initialize_module__ = function(f) {
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
+var global = window;
 
 var __commoner_module__different_path$absolute$second_js = __commoner_initialize_module__(function (module, exports) {
   "use strict";

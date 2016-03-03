@@ -15,6 +15,7 @@ var __commoner_initialize_module__ = function(f) {
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
+var global = window;
 var __commoner_helper__createClass = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
@@ -96,6 +97,7 @@ var __commoner_initialize_module__ = function(f) {
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
+var global = window;
 var __commoner_helper__interopRequireDefault = function (obj) {
   return obj && obj.__esModule ? obj : {
     default: obj
@@ -150,6 +152,7 @@ var __commoner_initialize_module__ = function(f) {
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
+var global = window;
 
 var __commoner_module__coffee_first$included_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
@@ -179,7 +182,7 @@ var __commoner_module__coffee_first$included_js = __commoner_initialize_module__
 
     assert asset = @env['arrow.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function(){var t=function(t){var e={exports:{}};return t.call(e.exports,e,e.exports),e.exports},e=function(t){return t&&t.__esModule?t:{"default":t}};(function(){window.Whatever=2}).call(this);t(function(t,n){"use strict";var o=window.Whatever,r=e(o);console.log(r["default"])}),t(function(t,n){"use strict";var o=window.Whatever,r=e(o),u=function(t){return t*t};console.log(u(r["default"]))})}();
+!function(){var t=function(t){var n={exports:{}};return t.call(n.exports,n,n.exports),n.exports},n=(window,function(t){return t&&t.__esModule?t:{"default":t}});(function(){window.Whatever=2}).call(this);t(function(t,e){"use strict";var o=window.Whatever,r=n(o);console.log(r["default"])}),t(function(t,e){"use strict";var o=window.Whatever,r=n(o),u=function(t){return t*t};console.log(u(r["default"]))})}();
 JS
   ensure
     @env.js_compressor = old_compressor

@@ -15,6 +15,7 @@ var __commoner_initialize_module__ = function(f) {
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
+var global = window;
 var __commoner_helper__interopRequireDefault = function (obj) {
   return obj && obj.__esModule ? obj : {
     default: obj

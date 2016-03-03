@@ -66,7 +66,7 @@ function findDeclarationInCoffeeFile(path) {
 function requireTarget(path) {
   const evaluate = path.get('arguments')[0].evaluate();
   if (!evaluate.confident || path.node.arguments.length !== 1) {
-    throw new Error('Dynamic require calls not supported');
+    return null;
   }
 
   const target = evaluate.value;
@@ -98,6 +98,11 @@ module.exports = (context) => {
     CallExpression: function(path, state) {
       if (path.get('callee').isIdentifier({name: 'require'})) {
         const target = requireTarget(path);
+
+        if (target == null) {
+          return;
+        }
+
         if (opts.globals != null && opts.globals[target] != null) {
           path.replaceWithSourceString(opts.globals[target]);
           return;
