@@ -38,7 +38,7 @@ module Sprockets
         @required = Set.new(input[:metadata][:required])
         @dependencies = Set.new(input[:metadata][:dependencies])
 
-        result = input[:cache].fetch([@cache_key, input[:data], babel_config]) do
+        result = input[:cache].fetch([filename, @cache_key, input[:data], babel_config]) do
           transform(input[:data], options(input))
         end
 
