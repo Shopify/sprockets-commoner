@@ -118,8 +118,7 @@ module.exports = (context) => {
       if (!isRequire(init)) {
         return
       }
-
-      const binding = path.scope.bindings[path.node.id.name];
+      const binding = path.scope.getBinding(path.node.id.name);
       if (!binding.constant) {
         return
       }
