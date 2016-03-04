@@ -32,11 +32,11 @@ module Sprockets
       def call(input)
         filename = input[:filename]
 
-        return unless ALLOWED_EXTENSIONS =~ filename && babel_config = babelrc_data(filename)
-
         @env = input[:environment]
         @required = Set.new(input[:metadata][:required])
         @dependencies = Set.new(input[:metadata][:dependencies])
+
+        return unless ALLOWED_EXTENSIONS =~ filename && babel_config = babelrc_data(filename)
 
         result = input[:cache].fetch([filename, @cache_key, input[:data], babel_config]) do
           transform(input[:data], options(input))
@@ -66,10 +66,19 @@ module Sprockets
             break if new_filename == filename
             filename = new_filename
             begin
-              return File.read(File.join(filename, BABELRC_FILE))
-            rescue
-              data = package_babel_data(File.join(filename, PACKAGE_JSON))
-              return JSON.dump(data) if data
+              name = File.join(filename, BABELRC_FILE)
+              data = File.read(name)
+              depend_on_file(name)
+              return data
+            rescue Errno::ENOENT
+              name = File.join(filename, PACKAGE_JSON)
+              data = package_babel_data(name)
+              if data
+                depend_on_file(name)
+                return JSON.dump(data)
+              else
+                nil
+              end
             end
           end
           return nil
@@ -77,7 +86,7 @@ module Sprockets
 
         def package_babel_data(filename)
           return JSON.parse(File.read(filename))['babel']
-        rescue
+        rescue Errno::ENOENT
           return nil
         end
 
@@ -104,6 +113,12 @@ module Sprockets
 
         def resolve(path, **kargs)
           uri, deps = @env.resolve!(path, **kargs)
+          @dependencies.merge(deps)
+          uri
+        end
+
+        def depend_on_file(path)
+          uri, deps = @env.resolve!(path, load_paths: [@env.root])
           @dependencies.merge(deps)
           uri
         end
