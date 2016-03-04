@@ -1,1 +1,1 @@
-require('whatever');
+require('whatever')();

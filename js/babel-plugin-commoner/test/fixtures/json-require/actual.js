@@ -1,1 +1,2 @@
-require('./info.json');
+var a = require('./info.json');
+a();

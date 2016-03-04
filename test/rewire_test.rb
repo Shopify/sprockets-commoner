@@ -80,9 +80,7 @@ var __commoner_module__scripts$index_js = __commoner_initialize_module__(functio
     return b.whatever();
   };
 
-  var _module = __commoner_module__scripts$module_js;
-
-  var _module2 = __commoner_helper__interopRequireDefault(_module);
+  var _module2 = __commoner_helper__interopRequireDefault(__commoner_module__scripts$module_js);
 });
 }();
     JS
@@ -110,21 +108,14 @@ var __commoner_helper__interopRequireDefault = function (obj) {
 var __commoner_module__arrow$second_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
-  var _extra = window.Whatever;
-
-  var _extra2 = __commoner_helper__interopRequireDefault(_extra);
+  var _extra2 = __commoner_helper__interopRequireDefault(window.Whatever);
 
   console.log(_extra2.default);
 });
 var __commoner_module__arrow$index_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
-  var _extra = window.Whatever;
-
-  var _extra2 = __commoner_helper__interopRequireDefault(_extra);
-
-  __commoner_module__arrow$second_js;
-
+  var _extra2 = __commoner_helper__interopRequireDefault(window.Whatever);
 
   var a = function a(x) {
     return x * x;
@@ -182,7 +173,7 @@ var __commoner_module__coffee_first$included_js = __commoner_initialize_module__
 
     assert asset = @env['arrow.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function(){var t=function(t){var n={exports:{}};return t.call(n.exports,n,n.exports),n.exports},n=(window,function(t){return t&&t.__esModule?t:{"default":t}});(function(){window.Whatever=2}).call(this);t(function(t,e){"use strict";var o=window.Whatever,r=n(o);console.log(r["default"])}),t(function(t,e){"use strict";var o=window.Whatever,r=n(o),u=function(t){return t*t};console.log(u(r["default"]))})}();
+!function(){var t=function(t){var n={exports:{}};return t.call(n.exports,n,n.exports),n.exports},n=(window,function(t){return t&&t.__esModule?t:{"default":t}});(function(){window.Whatever=2}).call(this);t(function(t,e){"use strict";var o=n(window.Whatever);console.log(o["default"])}),t(function(t,e){"use strict";var o=n(window.Whatever),r=function(t){return t*t};console.log(r(o["default"]))})}();
 JS
   ensure
     @env.js_compressor = old_compressor

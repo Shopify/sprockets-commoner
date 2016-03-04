@@ -25,9 +25,6 @@ var __commoner_module__different_path$absolute$second_js = __commoner_initialize
 var __commoner_module__different_path$absolute$index_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
-  __commoner_module__different_path$absolute$second_js;
-
-
   console.log(2);
 });
 }();
