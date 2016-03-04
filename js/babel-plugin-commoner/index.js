@@ -103,8 +103,10 @@ module.exports = (context) => {
           return;
         }
 
-        if (opts.globals != null && opts.globals[target] != null) {
-          path.replaceWithSourceString(opts.globals[target]);
+        let name;
+        if (opts.globals != null && (name = opts.globals[target]) != null) {
+          path.scope.rename(name);
+          path.replaceWithSourceString(name);
           return;
         }
 
