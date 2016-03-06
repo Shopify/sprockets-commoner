@@ -160,7 +160,9 @@ module.exports = (context) => {
   return {
     inherits: require(resolve('babel-plugin-transform-es2015-modules-commonjs', {basedir: process.cwd()})),
     pre(file) {
-      file.metadata.requires = [];
+      if (file.metadata.requires == null) {
+        file.metadata.requires = [];
+      }
       // The actual helpers are generated in babel.rb
       file.set("helperGenerator", (name) => t.identifier(`__commoner_helper__${name}`));
     },
