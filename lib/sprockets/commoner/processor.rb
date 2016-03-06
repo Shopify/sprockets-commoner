@@ -12,7 +12,17 @@ module Sprockets
       dependencies babel: 'babel-core'
 
       method :version, 'function() { return [process.version, babel.version]; }'
-      method :transform, 'babel.transform'
+      method :transform, %q{function(code, opts) {
+  try {
+    return babel.transform(code, opts);
+  } catch (err) {
+    if (err.codeFrame != null) {
+      err.message += "\n";
+      err.message += err.codeFrame;
+    }
+    throw err;
+  }
+}}
 
       def self.call(input)
         @instance ||= new(input[:environment].root)
