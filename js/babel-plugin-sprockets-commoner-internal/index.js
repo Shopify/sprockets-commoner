@@ -14,7 +14,7 @@ const IDENTIFIER_REGEX = `^(?:(?:${VALID_ASSIGNMENT}\\s*=)|(?:class ${VALID_ASSI
 /*
  * BIGGEST HACK OF __ALL_TIME__
  * If we're requiring a CoffeeScript file, we're going to be assuming that we're assigning to the global namespace in that file.
- * so, use a RegExp to find out that constiable definition. (yep)
+ * so, use a RegExp to find out that variable definition. (yep)
  *
  * We can remove this once all CoffeeScript is gone
  */
@@ -94,7 +94,7 @@ module.exports = (context) => {
       return name;
     } else {
       const resolvedPath = resolve(path, opts);
-      file.metadata.requires.push(resolvedPath);
+      file.metadata.required.push(resolvedPath);
 
       // Check if the path is under sourceRoot
       const root = file.opts.sourceRoot;
@@ -158,36 +158,37 @@ module.exports = (context) => {
   };
 
   return {
-    inherits: require(resolve('babel-plugin-transform-es2015-modules-commonjs', {basedir: process.cwd()})),
     pre(file) {
-      if (file.metadata.requires == null) {
-        file.metadata.requires = [];
+      if (file.metadata.required == null) {
+        file.metadata.required = [];
       }
-      // The actual helpers are generated in babel.rb
-      file.set("helperGenerator", (name) => t.identifier(`__commoner_helper__${name}`));
     },
     visitor: {
       Program: {
         exit(path, state) {
           // Get options from commoner-options and merge them with the options
           // that were passed to this plugin in .babelrc
-          opts = Object.assign(
-            {
-              // We can get these from Sprockets
-              extensions: [
-                '.js',
-                '.json',
-                '.coffee',
-                '.js.erb',
-                '.coffee.erb'
-              ],
-            },
+          opts = {
+            // We can get these from Sprockets
+            extensions: [
+              '.js',
+              '.json',
+              '.coffee',
+              '.js.erb',
+              '.coffee.erb'
+            ],
+          };
+
+          // Look for the sprockets-commoner plugin for extra options
+          state.file.opts.plugins
+            .map((plugin) => plugin[1])
+            .filter((opts) => opts != null && opts.__commoner_options)
+            .forEach((plugin) => Object.assign(opts, plugin));
+
+          Object.assign(opts,
             state.opts,
-            ...state.file.opts.plugins
-              .map((plugin) => plugin[1])
-              .filter((opts) => opts != null && opts.__commoner_options)
+            {basedir: dirname(state.file.opts.filename)}
           );
-          opts.basedir = dirname(state.file.opts.filename);
           regex = new RegExp(`^${state.file.opts.sourceRoot}/`);
 
           // Signal back to Sprockets that we're rewiring
@@ -200,8 +201,8 @@ module.exports = (context) => {
             node.body.push(exposeTemplate(t.identifier(expose)));
           }
 
-          // Transform module to a constiable assignment.
-          // This constiable is then referenced by any dependant children.
+          // Transform module to a variable assignment.
+          // This variable is then referenced by any dependant children.
           node.body = [t.variableDeclaration(
             'var',
             [t.variableDeclarator(

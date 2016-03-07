@@ -9,12 +9,24 @@ module Sprockets
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
       ALLOWED_EXTENSIONS = /\.js(?:\.erb)?\z/
 
-      dependencies babel: 'babel-core'
+      dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal'
 
       method :version, 'function() { return [process.version, babel.version]; }'
-      method :transform, %q{function(code, opts) {
+      method :transform, %q{function(code, opts, commonerOpts) {
   try {
-    return babel.transform(code, opts);
+    var file = new babel.File(opts);
+
+    // The actual helpers are generated in bundle.rb
+    file.set("helperGenerator", function(name) { return babel.types.identifier(`__commoner_helper__${name}`); });
+
+    var commonerPlugin = babel.OptionManager.normalisePlugin(commoner);
+    file.buildPluginsForOptions({plugins: [[commonerPlugin, commonerOpts]]});
+
+    return file.wrap(code, function () {
+      file.addCode(code);
+      file.parseCode(code);
+      return file.transform();
+    });
   } catch (err) {
     if (err.codeFrame != null) {
       err.message += "\n";
@@ -49,11 +61,11 @@ module Sprockets
         return unless ALLOWED_EXTENSIONS =~ filename && babel_config = babelrc_data(filename)
 
         result = input[:cache].fetch([filename, @cache_key, input[:data], babel_config]) do
-          transform(input[:data], options(input))
+          transform(input[:data], options(input), paths: @env.paths)
         end
 
-        if result['metadata'].has_key?('requires')
-          result['metadata']['requires'].each do |r|
+        if result['metadata'].has_key?('required')
+          result['metadata']['required'].each do |r|
             asset = resolve(r, accept: input[:content_type], pipeline: :self)
             @required << asset
           end
@@ -71,10 +83,7 @@ module Sprockets
 
       private
         def babelrc_data(filename)
-          loop do
-            new_filename = File.dirname(filename)
-            break if new_filename == filename
-            filename = new_filename
+          while filename != (filename = File.dirname(filename))
             begin
               name = File.join(filename, BABELRC_FILE)
               data = File.read(name)
@@ -107,16 +116,6 @@ module Sprockets
             'filename' => input[:filename],
             'filenameRelative' => PathUtils.split_subpath(input[:load_path], input[:filename]),
             'moduleRoot' => nil,
-            'plugins' => [
-              ['commoner-options', {
-                # commoner looks for this property to copy options over from
-                # This makes it possible for Sprockets to pass on options to commoner, while also having options in .babelrc
-                # commoner does a shallow merge of what is defined in .babelrc and what is defined here
-                # In the future (Sprockets 4 probably) we can also use this to pass on extensions
-                __commoner_options: true,
-                paths: @env.paths,
-              }],
-            ],
             'sourceRoot' => @env.root,
           }
         end

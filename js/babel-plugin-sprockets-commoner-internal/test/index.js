@@ -2,13 +2,13 @@ var path    = require('path');
 var fs      = require('fs');
 var assert  = require('assert');
 var babel   = require('babel-core');
-var optionsPlugin = require('../../babel-plugin-commoner-options');
+var optionsPlugin = require('../../babel-plugin-sprockets-commoner');
 
 function trim(str) {
   return str.replace(/^\s+|\s+$/, '');
 }
 
-describe('babel-plugin-transform-dev', function() {
+describe('babel-plugin-sprockets-commoner-internal', function() {
   var fixturesDir = path.join(__dirname, 'fixtures');
 
   fs.readdirSync(fixturesDir).map(function(caseName) {
@@ -16,9 +16,6 @@ describe('babel-plugin-transform-dev', function() {
 
     var optionsPath = path.join(fixtureDir, 'options.js');
     var options     = require(optionsPath, 'utf8');
-    if (options.options != null) {
-      options.options.__commoner_options = true;
-    }
 
     var actualPath    = path.join(fixtureDir, 'actual.js');
     var expectedPath  = path.join(fixtureDir, 'expected.js');
@@ -32,7 +29,7 @@ describe('babel-plugin-transform-dev', function() {
     it('works for the ' + caseName + ' case', function() {
       assert.equal(trim(expected), trim(actual));
       if (options.expectedRequires != null) {
-        assert.deepEqual(options.expectedRequires, result.metadata.requires);
+        assert.deepEqual(options.expectedRequires, result.metadata.required);
       }
     });
   });
@@ -44,9 +41,6 @@ describe('babel-plugin-transform-dev', function() {
 
     var optionsPath = path.join(errorDir, 'options.js');
     var options     = require(optionsPath, 'utf8');
-    if (options.options != null) {
-      options.options.__commoner_options = true;
-    }
 
     var actualPath    = path.join(errorDir, 'actual.js');
     var babelOptions = { sourceRoot: options.sourceRoot || __dirname, plugins: [ [optionsPlugin, options.options] ], metadata: true };

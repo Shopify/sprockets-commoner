@@ -4,7 +4,7 @@ set -euo pipefail
 gem install bundler --version '1.11.2'
 bundle check || bundle install -j 4
 
-for path in "./test/fixtures" "./test/fixtures/vendor-stub" "./js/babel-plugin-commoner"; do
+for path in "./test/fixtures" "./test/fixtures/vendor-stub" "./js/babel-plugin-sprockets-commoner-internal"; do
   pushd "$path" >/dev/null
   npm install --no-progress
   popd >/dev/null

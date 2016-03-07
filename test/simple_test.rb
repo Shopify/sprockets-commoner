@@ -9,9 +9,20 @@ class SimpleTest < MiniTest::Test
   def test_no_rewire
     assert asset = @env['no-rewire.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-"use strict";
+!function() {
+var __commoner_initialize_module__ = function(f) {
+  var module = {exports: {}};
+  f.call(module.exports, module, module.exports);
+  return module.exports;
+};
+var global = window;
 
-var a = 1;
+var __commoner_module__no_rewire$index_js = __commoner_initialize_module__(function (module, exports) {
+  "use strict";
+
+  var a = 1;
+});
+}();
 JS
   end
 end

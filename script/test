@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -x
 bundle exec rake test
-pushd js/babel-plugin-commoner
+pushd js/babel-plugin-sprockets-commoner-internal
 npm test
 popd

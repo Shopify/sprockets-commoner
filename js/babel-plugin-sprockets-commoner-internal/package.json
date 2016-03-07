@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-commoner",
+  "name": "babel-plugin-sprockets-commoner-internal",
   "private": true,
   "description": "Find require calls and resolve the library they're calling.",
   "scripts": {
