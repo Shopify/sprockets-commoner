@@ -7,7 +7,7 @@ class RewireTest < MiniTest::Test
   end
 
   def test_just_js
-    assert asset = @env['scripts']
+    assert asset = @env['scripts.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
 !function() {
 var __commoner_initialize_module__ = function(f) {
@@ -177,5 +177,85 @@ var __commoner_module__coffee_first$included_js = __commoner_initialize_module__
 JS
   ensure
     @env.js_compressor = old_compressor
+  end
+
+  def test_require_self_js
+    assert asset = @env['scripts-require_self.js']
+    assert_equal <<-JS.chomp, asset.to_s.chomp
+!function() {
+var __commoner_initialize_module__ = function(f) {
+  var module = {exports: {}};
+  f.call(module.exports, module, module.exports);
+  return module.exports;
+};
+var global = window;
+var __commoner_helper__createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}(),
+    __commoner_helper__classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+},
+    __commoner_helper__interopRequireDefault = function (obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+};
+var __commoner_module__scripts_require_self$module_js = __commoner_initialize_module__(function (module, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var Neato = function () {
+    function Neato() {
+      __commoner_helper__classCallCheck(this, Neato);
+    }
+
+    __commoner_helper__createClass(Neato, [{
+      key: "whatever",
+      value: function whatever() {
+        return 3;
+      }
+    }]);
+
+    return Neato;
+  }();
+
+  exports.default = Neato;
+});
+var __commoner_module__scripts_require_self$index_js = __commoner_initialize_module__(function (module, exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  exports.default = function () {
+    var b = new _module2.default();
+
+    return b.whatever();
+  };
+
+  var _module2 = __commoner_helper__interopRequireDefault(__commoner_module__scripts_require_self$module_js);
+});
+}();
+    JS
   end
 end

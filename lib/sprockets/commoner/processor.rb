@@ -55,7 +55,8 @@ module Sprockets
         filename = input[:filename]
 
         @env = input[:environment]
-        @required = Set.new(input[:metadata][:required])
+        @required = input[:metadata][:required].to_a
+        insertion_index = @required.index(input[:uri]) || -1
         @dependencies = Set.new(input[:metadata][:dependencies])
 
         return unless ALLOWED_EXTENSIONS =~ filename && babel_config = babelrc_data(filename)
@@ -67,14 +68,14 @@ module Sprockets
         if result['metadata'].has_key?('required')
           result['metadata']['required'].each do |r|
             asset = resolve(r, accept: input[:content_type], pipeline: :self)
-            @required << asset
+            @required.insert(insertion_index, asset)
           end
         end
 
         {
           data: result['code'],
           dependencies: @dependencies,
-          required: @required,
+          required: Set.new(@required),
 
           commoner_used_helpers: Set.new(input[:metadata][:commoner_used_helpers]) + result['metadata']['usedHelpers'],
           commoner_enabled: input[:metadata][:commoner_enabled] | result['metadata']['commonerEnabled'],
