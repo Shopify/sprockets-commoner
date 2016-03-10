@@ -35,10 +35,12 @@ module Sprockets
     throw err;
   }
 }}
+      def self.instance(env)
+        @instance ||= new(env.root)
+      end
 
       def self.call(input)
-        @instance ||= new(input[:environment].root)
-        @instance.call(input)
+        instance(input[:environment]).call(input)
       end
 
       def initialize(root)
