@@ -17,7 +17,7 @@ module Sprockets
     var file = new babel.File(opts);
 
     // The actual helpers are generated in bundle.rb
-    file.set("helperGenerator", function(name) { return babel.types.identifier(`__commoner_helper__${name}`); });
+    file.set("helperGenerator", function(name) { return babel.types.identifier('__commoner_helper__' + name); });
 
     var commonerPlugin = babel.OptionManager.normalisePlugin(commoner);
     file.buildPluginsForOptions({plugins: [[commonerPlugin, commonerOpts]]});

@@ -1,7 +1,7 @@
-module.exports = function() {
+module.exports = function () {
   return {
-    pre() {
+    pre: function pre() {
       this.opts.__commoner_options = true;
     }
-  }
-}
+  };
+};
