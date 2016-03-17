@@ -7,9 +7,9 @@ const dirname = require('path').dirname;
 const GLOBAL_OBJECT = '(?:window|Shopify|Sello)';
 const VALID_IDENTIFIER = '[a-zA-Z][_a-zA-Z0-9_]*';
 // Look for identifiers that look like 'window.Something' or 'Shopify.Something'
-const VALID_ASSIGNMENT = `(${GLOBAL_OBJECT}(?:\\.${VALID_IDENTIFIER})+)`;
+const VALID_ASSIGNMENT = '(' + GLOBAL_OBJECT + '(?:\\.' + VALID_IDENTIFIER + ')+)';
 // Look for 'window.Something =' or 'class window.Something'
-const IDENTIFIER_REGEX = `^(?:(?:${VALID_ASSIGNMENT}\\s*=)|(?:class ${VALID_ASSIGNMENT}))`;
+const IDENTIFIER_REGEX = '^(?:(?:' + VALID_ASSIGNMENT + '\\s*=)|(?:class ' + VALID_ASSIGNMENT + '))';
 
 /*
  * BIGGEST HACK OF __ALL_TIME__
@@ -31,9 +31,9 @@ const IDENTIFIER_REGEX = `^(?:(?:${VALID_ASSIGNMENT}\\s*=)|(?:class ${VALID_ASSI
   }
 
   if (identifiers.length === 0) {
-    throw new Error(`No identifiers found in ${path}`);
+    throw new Error('No identifiers found in ' + path);
   } else if (identifiers.length > 1) {
-    throw new Error(`Multiple identifiers found in ${path}`);
+    throw new Error('Multiple identifiers found in ' + path);
   }
 
   return identifiers[0];
@@ -69,9 +69,9 @@ function findExpose(directives) {
   return null;
 }
 
-module.exports = (context) => {
+module.exports = function(context) {
   const t = context.types;
-  const exposeTemplate = context.template(`$0 = exports['default'] != null ? exports['default'] : exports;`);
+  const exposeTemplate = context.template("$0 = exports['default'] != null ? exports['default'] : exports;");
 
   let opts = null;
   let regex = null;
@@ -85,7 +85,7 @@ module.exports = (context) => {
         return '_';
       }
     });
-    return `__commoner_module__${escapedPath}`;
+    return '__commoner_module__' + escapedPath;
   }
 
   function resolveTarget(file, path) {
@@ -99,7 +99,7 @@ module.exports = (context) => {
       // Check if the path is under sourceRoot
       const root = file.opts.sourceRoot;
       if (!regex.test(resolvedPath)) {
-        throw new Error(`Cannot find module '${path}' from '${dirname(file.opts.filename)}' under '${root}'`);
+        throw new Error("Cannot find module '" + path + "' from '" + dirname(file.opts.filename) + "' under '" + root + "'");
       }
 
       if (/\.coffee$/.test(resolvedPath)) {
@@ -181,15 +181,15 @@ module.exports = (context) => {
 
           // Look for the sprockets-commoner plugin for extra options
           state.file.opts.plugins
-            .map((plugin) => plugin[1])
-            .filter((opts) => opts != null && opts.__commoner_options)
-            .forEach((plugin) => Object.assign(opts, plugin));
+            .map(function(plugin) { return plugin[1]; })
+            .filter(function(opts) { return opts != null && opts.__commoner_options; })
+            .forEach(function(plugin) { return Object.assign(opts, plugin); });
 
           Object.assign(opts,
             state.opts,
             {basedir: dirname(state.file.opts.filename)}
           );
-          regex = new RegExp(`^${state.file.opts.sourceRoot}/`);
+          regex = new RegExp('^' + state.file.opts.sourceRoot + '/');
 
           // Signal back to Sprockets that we're rewiring
           state.file.metadata.commonerEnabled = true;
