@@ -124,7 +124,7 @@ module Sprockets
         end
 
         def resolve(path, **kargs)
-          uri, deps = @env.resolve!(path, **kargs)
+          uri, deps = @env.resolve!(path, load_paths: [@env.root], **kargs)
           @dependencies.merge(deps)
           uri
         end

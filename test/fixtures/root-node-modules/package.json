@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "dependencies": {
+    "empty-module": "0.0.2"
+  },
+  "babel": {}
+}
