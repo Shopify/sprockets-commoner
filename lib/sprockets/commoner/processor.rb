@@ -46,15 +46,15 @@ module Sprockets
 
       def initialize(root)
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
+      end
 
-        @cache_key = [
+      def call(input)
+        @cache_key ||= [
           self.class.name,
           version,
           VERSION,
         ].freeze
-      end
 
-      def call(input)
         filename = input[:filename]
 
         @env = input[:environment]
