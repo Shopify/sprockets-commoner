@@ -19,8 +19,12 @@ describe('babel-plugin-sprockets-commoner-internal', function() {
 
     var actualPath    = path.join(fixtureDir, 'actual.js');
     var expectedPath  = path.join(fixtureDir, 'expected.js');
+    var pluginOptions = {resolve: require('browser-resolve').sync};
+    if (options.options) {
+      Object.assign(pluginOptions, options.options);
+    }
 
-    var babelOptions = { sourceRoot: options.sourceRoot || __dirname, plugins: [ [optionsPlugin, options.options] ], metadata: true };
+    var babelOptions = { sourceRoot: options.sourceRoot || __dirname, plugins: [ [optionsPlugin, pluginOptions] ], metadata: true };
 
     var result = babel.transformFileSync(actualPath, babelOptions);
     var actual = result.code;
@@ -43,7 +47,11 @@ describe('babel-plugin-sprockets-commoner-internal', function() {
     var options     = require(optionsPath, 'utf8');
 
     var actualPath    = path.join(errorDir, 'actual.js');
-    var babelOptions = { sourceRoot: options.sourceRoot || __dirname, plugins: [ [optionsPlugin, options.options] ], metadata: true };
+    var pluginOptions = {resolve: require('browser-resolve').sync};
+    if (options.options) {
+      Object.assign(pluginOptions, options.options);
+    }
+    var babelOptions = { sourceRoot: options.sourceRoot || __dirname, plugins: [ [optionsPlugin, pluginOptions] ], metadata: true };
 
     it('works for the ' + caseName + ' case', function() {
       try {
