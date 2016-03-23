@@ -1,0 +1,5 @@
+{
+  "browser": {
+    "./shimmed.js": "./shimmed-browser.js"
+  }
+}
