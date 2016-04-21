@@ -6,7 +6,7 @@ Uses Node directly to run Babel instead of ExecJS. This gives the benefit of bei
 
 1. `rails new project; cd project`
 2. Add sprockets-commoner to Gemfile and `bundle install`
-3. Add package.json with `babel-core`, `browser-resolve`, `babel-types`, `babel-generator`, `babel-helpers` and any client-side packages you need (can be simplified).
+3. Add package.json with `babel-core`, `babel-types`, `babel-generator`, `babel-helpers`, and any client-side packages you need (can be simplified).
 4. Remove `config.assets.debug = true` from `config/environments/development.rb` (can be done automatically)
 5. Add `Rails.application.config.assets.paths << Rails.root.join('node_modules')` to `config/initializers/assets.rb` (can be done automatically)
 6. Add `.babelrc` with any config to the project root

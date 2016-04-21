@@ -25,6 +25,7 @@ if (typeof Object.assign != 'function') {
 
 var fs = require('fs');
 var dirname = require('path').dirname;
+var resolve = require('browser-resolve').sync;
 
 var GLOBAL_OBJECT = '(?:window|Shopify|Sello)';
 var VALID_IDENTIFIER = '[a-zA-Z][_a-zA-Z0-9_]*';
@@ -111,7 +112,7 @@ module.exports = function (context) {
     if (opts.globals != null && (name = opts.globals[path]) != null) {
       return name;
     } else {
-      var resolvedPath = opts.resolve(path, opts);
+      var resolvedPath = resolve(path, opts);
       file.metadata.required.push(resolvedPath);
 
       // Check if the path is under sourceRoot

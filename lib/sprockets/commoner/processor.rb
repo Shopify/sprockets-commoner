@@ -9,11 +9,10 @@ module Sprockets
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
       ALLOWED_EXTENSIONS = /\.js(?:\.erb)?\z/
 
-      dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal', resolve: 'browser-resolve.sync'
+      dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal'
 
       method :version, 'function() { return [process.version, babel.version]; }'
       method :transform, %q{function(code, opts, commonerOpts) {
-  commonerOpts.resolve = resolve;
   try {
     var file = new babel.File(opts);
 
