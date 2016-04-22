@@ -127,13 +127,6 @@ var __commoner_module__arrow$index_js = __commoner_initialize_module__(function 
 JS
   end
 
-  def test_no_babel
-    assert asset = @env['nobabelrc.js']
-    assert_equal <<-JS.chomp, asset.to_s.chomp
-const a = (x) => x * x;
-JS
-  end
-
   def test_from_coffee
     assert asset = @env['coffee-first.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp

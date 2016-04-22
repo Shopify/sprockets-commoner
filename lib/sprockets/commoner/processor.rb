@@ -43,7 +43,11 @@ module Sprockets
         instance(input[:environment]).call(input)
       end
 
-      def initialize(root)
+      attr_reader :include, :exclude, :babel_exclude
+      def initialize(root, include: [root], exclude: [], babel_exclude: [/node_modules/])
+        @include = include
+        @exclude = exclude
+        @babel_exclude = babel_exclude
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
       end
 
@@ -56,12 +60,15 @@ module Sprockets
 
         filename = input[:filename]
 
+        return unless should_process?(filename)
+
         @env = input[:environment]
         @required = input[:metadata][:required].to_a
         insertion_index = @required.index(input[:uri]) || -1
         @dependencies = Set.new(input[:metadata][:dependencies])
 
-        return unless ALLOWED_EXTENSIONS =~ filename && babel_config = babelrc_data(filename)
+
+        babel_config = babelrc_data(filename)
 
         result = input[:cache].fetch([filename, @cache_key, input[:data], babel_config]) do
           transform(input[:data], options(input), paths: @env.paths)
@@ -85,6 +92,25 @@ module Sprockets
       end
 
       private
+        def should_process?(filename)
+          return false unless ALLOWED_EXTENSIONS =~ filename
+          return false unless self.include.empty? || match_any?(self.include, filename)
+          return false if match_any?(self.exclude, filename)
+          true
+        end
+
+        def match_any?(patterns, filename)
+          patterns.any? { |pattern| pattern_match(pattern, filename) }
+        end
+
+        def pattern_match(pattern, filename)
+          if pattern.is_a?(String)
+            filename.start_with?(pattern)
+          else
+            pattern === filename
+          end
+        end
+
         def babelrc_data(filename)
           while filename != (filename = File.dirname(filename))
             begin
@@ -116,6 +142,7 @@ module Sprockets
           # TODO(bouk): Fix sourcemaps. Sourcemaps are only available in Sprockets v4
           {
             'ast' => false,
+            'babelrc' => !match_any?(self.babel_exclude, input[:filename]),
             'filename' => input[:filename],
             'filenameRelative' => PathUtils.split_subpath(input[:load_path], input[:filename]),
             'moduleRoot' => nil,
