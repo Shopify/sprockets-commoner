@@ -12,7 +12,9 @@ class ErrorTest < MiniTest::Test
     end
     assert_equal <<-ERROR.strip, error.message.strip
 #{File.join(__dir__, 'fixtures', 'typo', 'index.js')}: Unexpected token (1:4)
-var default = a;
+> 1 | var default = a;
+    |     ^
+  2 |
 ERROR
   end
 end
