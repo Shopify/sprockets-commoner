@@ -11,3 +11,5 @@ module Sprockets
   register_bundle_metadata_reducer 'application/javascript', :commoner_used_helpers, Set.new, :+
   register_bundle_processor 'application/javascript', ::Sprockets::Commoner::Bundle
 end
+
+require 'sprockets/commoner/railtie' if defined?(Rails)
