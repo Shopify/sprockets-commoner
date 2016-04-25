@@ -19,7 +19,7 @@ describe('babel-plugin-sprockets-commoner-internal', function() {
 
     var actualPath    = path.join(fixtureDir, 'actual.js');
     var expectedPath  = path.join(fixtureDir, 'expected.js');
-    var pluginOptions = {resolve: require('browser-resolve').sync};
+    var pluginOptions = {};
     if (options.options) {
       Object.assign(pluginOptions, options.options);
     }
@@ -47,7 +47,7 @@ describe('babel-plugin-sprockets-commoner-internal', function() {
     var options     = require(optionsPath, 'utf8');
 
     var actualPath    = path.join(errorDir, 'actual.js');
-    var pluginOptions = {resolve: require('browser-resolve').sync};
+    var pluginOptions = {};
     if (options.options) {
       Object.assign(pluginOptions, options.options);
     }
