@@ -3,7 +3,7 @@
   "private": true,
   "description": "Find require calls and resolve the library they're calling.",
   "scripts": {
-    "test": "mocha"
+    "test": "NODE_ENV=test mocha"
   },
   "devDependencies": {
     "babel-core": "^6.2.1",

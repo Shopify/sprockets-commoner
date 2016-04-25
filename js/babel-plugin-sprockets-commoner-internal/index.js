@@ -184,6 +184,14 @@ module.exports = function (context) {
     },
 
     visitor: {
+      MemberExpression: function MemberExpression(path) {
+        if (path.get("object").matchesPattern("process.env")) {
+          var key = path.toComputedKey();
+          if (t.isStringLiteral(key)) {
+            path.replaceWith(t.valueToNode(process.env[key.value]));
+          }
+        }
+      },
       Program: {
         exit: function exit(path, state) {
           // Get options from commoner-options and merge them with the options
