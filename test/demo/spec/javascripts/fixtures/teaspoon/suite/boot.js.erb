@@ -1,0 +1,7 @@
+//= require spec_helper
+
+<%
+Dir['spec/javascripts/**/*_spec.js'].each do |test|
+  require_asset Rails.root.join(test).to_s
+end
+%>
