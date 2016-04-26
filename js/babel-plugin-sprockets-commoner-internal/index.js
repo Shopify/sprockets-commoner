@@ -27,77 +27,84 @@ var fs = require('fs');
 var dirname = require('path').dirname;
 var resolve = require('browser-resolve').sync;
 
-var GLOBAL_OBJECT = '(?:window|Shopify|Sello)';
-var VALID_IDENTIFIER = '[a-zA-Z][_a-zA-Z0-9_]*';
-// Look for identifiers that look like 'window.Something' or 'Shopify.Something'
-var VALID_ASSIGNMENT = '(' + GLOBAL_OBJECT + '(?:\\.' + VALID_IDENTIFIER + ')+)';
-// Look for 'window.Something =' or 'class window.Something'
-var IDENTIFIER_REGEX = '^(?:(?:' + VALID_ASSIGNMENT + '\\s*=)|(?:class ' + VALID_ASSIGNMENT + '))';
-
-/*
- * BIGGEST HACK OF __ALL_TIME__
- * If we're requiring a CoffeeScript file, we're going to be assuming that we're assigning to the global namespace in that file.
- * so, use a RegExp to find out that variable definition. (yep)
- *
- * We can remove this once all CoffeeScript is gone
- */
-function findDeclarationInCoffeeFile(path) {
-  var contents = fs.readFileSync(path);
-  var identifiers = [];
-
-  for (var regexp = new RegExp(IDENTIFIER_REGEX, 'gm'), find = regexp.exec(contents); find != null; find = regexp.exec(contents)) {
-    identifiers.push(find[1] || find[2]);
-  }
-
-  if (identifiers.length === 0) {
-    throw new Error('No identifiers found in ' + path);
-  } else if (identifiers.length > 1) {
-    throw new Error('Multiple identifiers found in ' + path);
-  }
-
-  return identifiers[0];
-}
-
-function isRequire(path) {
-  return path.isCallExpression() && path.get('callee').isIdentifier({ name: 'require' });
-}
-
-// Get the target path from a require call
-function requireTarget(path) {
-  var evaluate = path.get('arguments')[0].evaluate();
-  if (!evaluate.confident || path.node.arguments.length !== 1) {
-    return null;
-  }
-
-  var target = evaluate.value;
-  if (typeof target !== 'string') {
-    throw new Error('Invalid require call, string expected');
-  }
-  return target;
-}
-
-// Find any 'expose <name>' directive and get back the value of '<name>'
-function findExpose(directives) {
-  var result = void 0;
-  for (var i = 0; i < directives.length; i++) {
-    if (result = /^expose ([A-Za-z\.]+)$/.exec(directives[i].value.value)) {
-      directives.splice(i, 1);
-      return result[1];
-    }
-  }
-  return null;
-}
-
 module.exports = function (context) {
   var t = context.types;
   var exposeTemplate = context.template("$0 = exports['default'] != null ? exports['default'] : exports;");
 
   var opts = null;
-  var regex = null;
+  var rootRegex = null;
+  var identifierRegex = null;
+
+  function createIdentifierRegex() {
+    var globals = ['window'].concat(opts.globalNamespaces).map(function(namespace) {
+      return namespace + '\\.';
+    });
+
+    // Construct regex with prefixes which denote globals (like window.Something, @Something, or anything else in opts.globalNamespaces)
+    var globalObject = '(?:@|' + globals.join('|') + ')';
+    var validIdentifier = '[a-zA-Z][_a-zA-Z0-9]*';
+    // Look for identifiers that look like 'window.Something' or 'Shopify.Something'
+    var validAssignment = '(' + globalObject + validIdentifier + '(?:\\.' + validIdentifier + ')*)';
+    // Look for 'window.Something =' or 'class window.Something'
+    return '^(?:(?:' + validAssignment + '\\s*=)|(?:class ' + validAssignment + '))';
+  }
+
+  /*
+   * BIGGEST HACK OF __ALL_TIME__
+   * If we're requiring a CoffeeScript file, we're going to be assuming that we're assigning to the global namespace in that file.
+   * so, use a RegExp to find out that variable definition. (yep)
+   */
+  function findDeclarationInCoffeeFile(path) {
+    var contents = fs.readFileSync(path);
+    var identifiers = [];
+
+    for (var regexp = new RegExp(identifierRegex, 'gm'), find = regexp.exec(contents); find != null; find = regexp.exec(contents)) {
+      identifiers.push(find[1] || find[2]);
+    }
+
+    if (identifiers.length === 0) {
+      throw new Error('No identifiers found in ' + path);
+    } else if (identifiers.length > 1) {
+      throw new Error('Multiple identifiers found in ' + path);
+    }
+
+    return identifiers[0].replace(/^@/, 'window.');
+  }
+
+  function isRequire(path) {
+    return path.isCallExpression() && path.get('callee').isIdentifier({ name: 'require' });
+  }
+
+  // Get the target path from a require call
+  function requireTarget(path) {
+    var evaluate = path.get('arguments')[0].evaluate();
+    if (!evaluate.confident || path.node.arguments.length !== 1) {
+      return null;
+    }
+
+    var target = evaluate.value;
+    if (typeof target !== 'string') {
+      throw new Error('Invalid require call, string expected');
+    }
+    return target;
+  }
+
+  // Find any 'expose <name>' directive and get back the value of '<name>'
+  function findExpose(directives) {
+    var result = void 0;
+    for (var i = 0; i < directives.length; i++) {
+      if (result = /^expose ([A-Za-z\.]+)$/.exec(directives[i].value.value)) {
+        directives.splice(i, 1);
+        return result[1];
+      }
+    }
+    return null;
+  }
+
 
   // Transform a path into a variable name
   function pathToIdentifier(path) {
-    var escapedPath = path.replace(regex, '').replace(/[^a-zA-Z0-9_]/g, function (match) {
+    var escapedPath = path.replace(rootRegex, '').replace(/[^a-zA-Z0-9_]/g, function (match) {
       if (match === '/') {
         return '$';
       } else {
@@ -117,7 +124,7 @@ module.exports = function (context) {
 
       // Check if the path is under sourceRoot
       var root = file.opts.sourceRoot;
-      if (!regex.test(resolvedPath)) {
+      if (!rootRegex.test(resolvedPath)) {
         throw new Error("Cannot find module '" + path + "' from '" + dirname(file.opts.filename) + "' under '" + root + "'");
       }
 
@@ -211,7 +218,8 @@ module.exports = function (context) {
           });
 
           Object.assign(opts, state.opts, { basedir: dirname(state.file.opts.filename) });
-          regex = new RegExp('^' + state.file.opts.sourceRoot + '/');
+          rootRegex = new RegExp('^' + state.file.opts.sourceRoot + '/');
+          identifierRegex = createIdentifierRegex();
 
           // Signal back to Sprockets that we're rewiring
           state.file.metadata.commonerEnabled = true;
