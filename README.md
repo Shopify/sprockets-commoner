@@ -70,9 +70,13 @@ Rails.application.config.assets.configure do |env|
 end
 ```
 
+## Testing with Teaspoon
+
+Teaspoon is not compatible with commoner by default. Under `test/demo` you can find a demo Rails application, containing a setup with Teaspoon. The key change is a custom boot partial and JavaScript file, found under `spec/javascripts/fixtures/teaspoon/suite`. Simply copy those two files under `fixtures/teaspoon/suite` in your JavaScript tests, make necessary changes to `boot.js.erb` to point to your test files, and you should be good to go.
+
 ## CoffeeScript interoperability
 
-Commoner is designed from the start as a tool that facilitates a transition from CoffeeScript to ES2015. This is the reason it has a couple of features to make this easier.
+Commoner is designed from the start to facilitate a transition from CoffeeScript to ES2015.
 
 ### Importing CoffeeScript files
 

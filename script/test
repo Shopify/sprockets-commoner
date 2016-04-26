@@ -4,3 +4,6 @@ bundle exec rake test
 pushd js/babel-plugin-sprockets-commoner-internal
 npm test
 popd
+pushd test/demo
+bundle exec teaspoon
+popd

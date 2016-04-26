@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+gem 'coffee-script'
+gem 'rails', '4.2.6'
+gem 'sprockets-commoner', path: '../../'
+
+group :development, :test do
+  gem 'teaspoon'
+  gem 'teaspoon-jasmine'
+end
