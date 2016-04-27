@@ -204,6 +204,7 @@ module.exports = function (context) {
           // Get options from commoner-options and merge them with the options
           // that were passed to this plugin in .babelrc
           opts = {
+            globalNamespaces: [],
             // We can get these from Sprockets
             extensions: ['.js', '.json', '.coffee', '.js.erb', '.coffee.erb']
           };
