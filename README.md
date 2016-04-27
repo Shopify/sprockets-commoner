@@ -60,7 +60,7 @@ Rails.application.config.assets.configure do |env|
     env.root,
     # include, exclude, and babel_exclude patterns can be path prefixes or regexes.
     # Explicitely list paths to include. The default is `[env.root]`
-    include: [File.join(env.root, 'app/assets/javascripts/subdirectory')],
+    include: ['app/assets/javascripts/subdirectory'],
     # List files to ignore and not process require calls or apply any Babel transforms to. Default is empty.
     exclude: [/ignored/],
     # Anything listed in babel_exclude has its require calls resolved, but no transforms listed in .babelrcs applied.

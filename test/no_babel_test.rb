@@ -6,7 +6,7 @@ class NoBabelTest < MiniTest::Test
     @env.unregister_postprocessor('application/javascript', Sprockets::Commoner::Processor)
     @env.register_postprocessor('application/javascript', Sprockets::Commoner::Processor.new(
       @env.root,
-      exclude: [/nobabelrc/],
+      exclude: ['nobabelrc/index.js'],
     ))
     @env.append_path File.join(__dir__, 'fixtures')
   end

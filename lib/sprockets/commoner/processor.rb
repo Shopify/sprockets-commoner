@@ -45,9 +45,9 @@ module Sprockets
 
       attr_reader :include, :exclude, :babel_exclude
       def initialize(root, include: [root], exclude: [], babel_exclude: [/node_modules/])
-        @include = include
-        @exclude = exclude
-        @babel_exclude = babel_exclude
+        @include = include.map {|path| expand_to_root(path, root) }
+        @exclude = exclude.map {|path| expand_to_root(path, root) }
+        @babel_exclude = babel_exclude.map {|path| expand_to_root(path, root) }
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
       end
 
@@ -92,6 +92,14 @@ module Sprockets
       end
 
       private
+        def expand_to_root(path, root)
+          if path.is_a?(String)
+            File.expand_path(path, root)
+          else
+            path
+          end
+        end
+
         def should_process?(filename)
           return false unless ALLOWED_EXTENSIONS =~ filename
           return false unless self.include.empty? || match_any?(self.include, filename)
