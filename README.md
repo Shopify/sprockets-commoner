@@ -1,6 +1,6 @@
 # Sprockets::Commoner
 
-`Sprockets::Commoner` is a gem that enables JavaScript package and Babel transformation in Sprockets.
+`Sprockets::Commoner` is a gem that enables JavaScript package and Babel transformation in Sprockets. It is meant as a replacement for [Browserify](http://browserify.org/) or [Webpack](https://webpack.github.io/) in Rails.
 
 ## Features
 
