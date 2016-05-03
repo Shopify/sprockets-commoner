@@ -199,6 +199,27 @@ module.exports = function (context) {
           }
         }
       },
+      UnaryExpression: function UnaryExpression(path) {
+        if (!path.node.operator === 'typeof') {
+          return;
+        }
+
+        var argument = path.get('argument');
+        if (!path.get('argument').isIdentifier()) {
+          return;
+        }
+
+        var name = path.node.argument.name;
+        if (name !== 'module' && name !== 'exports') {
+          return;
+        }
+
+        if (path.scope.hasBinding(name)) {
+          return;
+        }
+
+        path.replaceWith(t.stringLiteral('object'));
+      },
       Program: {
         exit: function exit(path, state) {
           // Get options from commoner-options and merge them with the options

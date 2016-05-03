@@ -2,7 +2,7 @@ var __commoner_module__actual_js = __commoner_initialize_module__(function (modu
   "use strict";
 
   (function (f) {
-    if (typeof exports === "object" && typeof module !== "undefined") {
+    if ("object" === "object" && "object" !== "undefined") {
       module.exports = f();
     } else if (typeof define === "function" && define.amd) {
       define([], f);
