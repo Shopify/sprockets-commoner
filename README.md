@@ -102,7 +102,7 @@ Then the second file will just be compiled down to `new window.ImportantClass()`
 We have added a custom directive that makes it very easy to expose an ES2015 module to the global namespace so it can be used by CoffeeScript files or any other code. For example:
 
 ```javascript
-'expose window.MyClass`;
+'expose window.MyClass';
 
 export default class MyClass {}
 ```
