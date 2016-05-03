@@ -28,7 +28,7 @@ To get started, let's begin with the simplest possible set up: just enabling res
 1. Add `sprockets-commoner` to Gemfile, run `bundle install`, and restart your Rails server.
 1. Add package.json with `babel-core` version 6 and any packages you want. For the example, we'll use the excellent [lodash](https://lodash.com) library. `npm install -S babel-core@6 lodash`
 1. `require` your client-side JavaScript packages from `application.js`!
-```
+```javascript
 var _ = require('lodash');
 
 console.log(_.map([1, 2, 3], function(n) { return n * 3; }));
@@ -40,7 +40,7 @@ console.log(_.map([1, 2, 3], function(n) { return n * 3; }));
 1. Add a `.babelrc` with you required configuration. We just need to do `echo '{presets: ["es2015"]}' > .babelrc`.
 1. Use any feature you want! For example, let's use `import` and arrow functions in our `application.js`:
 
-```
+```javascript
 import {map} from 'lodash';
 
 console.log(map([1, 2, 3], (n) => n * 3));
@@ -52,7 +52,7 @@ console.log(map([1, 2, 3], (n) => n * 3));
 
 By default, commoner will process any file under the application root directory. If you want more fine-tuned control over which files to process, you can specify which paths to include or exclude. To do so, you will need to re-register the Sprockets processor. For example:
 
-```
+```ruby
 # In config/initializers/sprockets_commoner.rb
 Rails.application.config.assets.configure do |env|
   env.unregister_postprocessor('application/javascript', Sprockets::Commoner::Processor)
@@ -83,12 +83,12 @@ Commoner is designed from the start to facilitate a transition from CoffeeScript
 Any JavaScript file can `require` a CoffeeScript file, which will cause that CoffeeScript file to be scanned for a global variable reference and the `require` call to be replaced with a reference.
 If we have the following two files:
 
-```
+```coffeescript
 # file.coffee
 class window.ImportantClass
 ```
 
-```
+```javascript
 // main.js
 var klass = require('./file');
 
@@ -101,7 +101,7 @@ Then the second file will just be compiled down to `new window.ImportantClass()`
 
 We have added a custom directive that makes it very easy to expose an ES2015 module to the global namespace so it can be used by CoffeeScript files or any other code. For example:
 
-```
+```javascript
 'expose window.MyClass`;
 
 export default class MyClass {}
@@ -109,7 +109,7 @@ export default class MyClass {}
 
 `expose` will use the default export if available, otherwise the whole module namespace will be assigned to the global variable. For example:
 
-```
+```javascript
 // constants.js
 'expose window.Constants';
 
@@ -138,7 +138,7 @@ After the regular Babel plugins are done doing their thing, `babel-plugin-common
 * It finds any `require` calls and rewires them to variable references (as detailed in [`require` support](#require-support))
 * It wraps the module in a function and supplies it with `module` and `exports`. The end value of `module.exports` gets assigned to the module identifier, which is referenced by other files (as specified in '`require` support') Example:
 
-```
+```javascript
 var __commoner_module__node_modules$package$index_js = __commoner_initialize_module__(function (module, exports) {
   exports.default = 123;
 });
@@ -151,14 +151,14 @@ After all the files have been transformed, there is a bundle step which combines
 
 For example, if we have the following two files:
 
-```
+```javascript
 // module.js
 export default function a() {
   return 1;
 };
 ```
 
-```
+```javascript
 // application.js
 import a from './module';
 
@@ -167,7 +167,7 @@ a();
 
 We will end up with the following (browser-runnable) file:
 
-```
+```javascript
 !function() {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
@@ -202,4 +202,3 @@ var __commoner_module__app$assets$javascripts$application_js = __commoner_initia
 ```
 
 This file is meant to be compressed, and does incredibly well when processed by UglifyJS.
-
