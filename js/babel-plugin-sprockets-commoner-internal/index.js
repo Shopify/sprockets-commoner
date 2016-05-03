@@ -72,7 +72,7 @@ module.exports = function (context) {
   }
 
   function isRequire(path) {
-    return path.isCallExpression() && path.get('callee').isIdentifier({ name: 'require' });
+    return path.isCallExpression() && path.get('callee').isIdentifier({ name: 'require' }) && !path.scope.hasBinding('require');
   }
 
   // Get the target path from a require call
