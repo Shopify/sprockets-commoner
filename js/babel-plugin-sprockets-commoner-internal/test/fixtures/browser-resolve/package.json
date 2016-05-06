@@ -1,5 +1,6 @@
 {
   "browser": {
-    "./shimmed.js": "./shimmed-browser.js"
+    "./shimmed.js": "./shimmed-browser.js",
+    "./ignored.js": false
   }
 }
