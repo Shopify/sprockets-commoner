@@ -63,7 +63,7 @@ module.exports = function (context) {
     }
 
     if (identifiers.length === 0) {
-      throw new Error('No identifiers found in ' + path);
+      return false;
     } else if (identifiers.length > 1) {
       throw new Error('Multiple identifiers found in ' + path);
     }
