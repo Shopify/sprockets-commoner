@@ -1,3 +1,4 @@
+require('./empty');
 var a = require('./class');
 var b = require('./assign');
 var c = require('./at-symbol');
