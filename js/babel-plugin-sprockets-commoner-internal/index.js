@@ -25,7 +25,9 @@ if (typeof Object.assign != 'function') {
 
 var fs = require('fs');
 var dirname = require('path').dirname;
+var join = require('path').join;
 var resolve = require('browser-resolve').sync;
+var emptyModule = join(__dirname, 'node_modules', 'browser-resolve', 'empty.js');
 
 module.exports = function (context) {
   var t = context.types;
@@ -120,6 +122,10 @@ module.exports = function (context) {
       return name;
     } else {
       var resolvedPath = resolve(path, opts);
+      if (resolvedPath === emptyModule) {
+        return false;
+      }
+
       file.metadata.required.push(resolvedPath);
 
       // Check if the path is under sourceRoot
@@ -155,6 +161,10 @@ module.exports = function (context) {
       }
 
       var name = resolveTarget(state.file, target);
+      if (name === false) {
+        path.get('init').replaceWith(t.objectExpression([]));
+        return;
+      }
       path.scope.rename(name);
       path.scope.rename(path.node.id.name, name);
       path.remove();
@@ -171,14 +181,18 @@ module.exports = function (context) {
 
       var replacement = resolveTarget(state.file, target);
       switch (path.parent.type) {
-        case "ExpressionStatement":
-          // We just need to know there's a dependency, we can remove it then
-          path.remove();
-          break;
-        default:
-          // Otherwise we just look for the module by referencing its Special Identifier™
+      case "ExpressionStatement":
+        // We just need to know there's a dependency, we can remove it then
+        path.remove();
+        break;
+      default:
+        // Otherwise we just look for the module by referencing its Special Identifier™
+        if (replacement === false) {
+          path.replaceWith(t.objectExpression([]));
+        } else {
           path.replaceWith(t.identifier(replacement));
-          break;
+        }
+        break;
       }
     }
   };
