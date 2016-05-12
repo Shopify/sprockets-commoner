@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'sprockets'
+require 'sprockets/commoner'
+
+require 'pry'
+
+Pry.start
