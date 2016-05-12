@@ -138,6 +138,10 @@ var __commoner_initialize_module__ = function(f) {
 };
 var global = window;
 
+(function() {
+  window.A = 1;
+
+}).call(this);
 var __commoner_module__coffee_first$included_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
