@@ -48,7 +48,7 @@ module Sprockets
       end
 
       attr_reader :include, :exclude, :babel_exclude
-      def initialize(root, include: [root], exclude: [], babel_exclude: [/node_modules/])
+      def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/])
         @include = include.map {|path| expand_to_root(path, root) }
         @exclude = exclude.map {|path| expand_to_root(path, root) }
         @babel_exclude = babel_exclude.map {|path| expand_to_root(path, root) }
