@@ -52,12 +52,6 @@ module Sprockets
       end
 
       def call(input)
-        @cache_key ||= [
-          self.class.name,
-          version,
-          VERSION,
-        ].freeze
-
         filename = input[:filename]
 
         return unless should_process?(filename)
@@ -70,9 +64,7 @@ module Sprockets
 
         babel_config = babelrc_data(filename)
 
-        result = input[:cache].fetch([filename, @cache_key, input[:data], babel_config]) do
-          transform(input[:data], options(input), paths: @env.paths)
-        end
+        result = transform(input[:data], options(input), paths: @env.paths)
 
         if result['metadata'].has_key?('required')
           result['metadata']['required'].each do |r|
