@@ -7,6 +7,7 @@ module Sprockets
 
       ExcludedFileError = Class.new(::StandardError)
 
+      VERSION = '1'.freeze
       BABELRC_FILE = '.babelrc'.freeze
       PACKAGE_JSON = 'package.json'.freeze
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
@@ -14,7 +15,7 @@ module Sprockets
 
       dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal'
 
-      method :version, 'function() { return [process.version, babel.version]; }'
+      method :version, 'function() { return babel.version; }'
       method :transform, %q{function(code, opts, commonerOpts) {
   try {
     var file = new babel.File(opts);
@@ -52,6 +53,17 @@ module Sprockets
         @exclude = exclude.map {|path| expand_to_root(path, root) }
         @babel_exclude = babel_exclude.map {|path| expand_to_root(path, root) }
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
+      end
+
+      def cache_key
+        @cache_key ||= [
+          self.class.name,
+          VERSION,
+          version,
+          @include.map(&:to_s),
+          @exclude.map(&:to_s),
+          @babel_exclude.map(&:to_s),
+        ]
       end
 
       def call(input)
