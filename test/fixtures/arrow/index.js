@@ -1,5 +1,6 @@
 import info from './extra';
 import './second';
+import './empty';
 
 const a = (x) => x * x;
 

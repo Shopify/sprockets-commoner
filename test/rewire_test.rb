@@ -112,6 +112,7 @@ var __commoner_module__arrow$second_js = __commoner_initialize_module__(function
 
   console.log(_extra2.default);
 });
+var __commoner_module__arrow$empty_js = {};
 var __commoner_module__arrow$index_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 

@@ -25,7 +25,7 @@ var global = window;
 var __commoner_module__babelrc_exclude$excludeme_js = __commoner_initialize_module__(function (module, exports) {
   export const a = 1;
 });
-var __commoner_module__babelrc_exclude$index_js = __commoner_initialize_module__(function (module, exports) {});
+var __commoner_module__babelrc_exclude$index_js = {};
 }();
 JS
   end
