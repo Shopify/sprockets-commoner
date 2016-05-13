@@ -70,11 +70,16 @@ module Sprockets
 
         result = transform(input[:data], options(input), paths: @env.paths)
 
+        if result['metadata'].has_key?('targetsToProcess')
+          result['metadata']['targetsToProcess'].each do |t|
+            unless should_process?(t)
+              raise ExcludedFileError, "#{t} was imported from #{filename} but this file won't be processed by Sprockets::Commoner"
+            end
+          end
+        end
+
         if result['metadata'].has_key?('required')
           result['metadata']['required'].each do |r|
-            unless COFFEE_EXTENSION =~ r || should_process?(r)
-              raise ExcludedFileError, "#{r} was imported from #{filename} but this file won't be processed by Sprockets::Commoner"
-            end
             asset = resolve(r, accept: input[:content_type], pipeline: :self)
             @required.insert(insertion_index, asset)
           end

@@ -1,1 +1,1 @@
-require('./excluded');
+var a = require('./excluded');

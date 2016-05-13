@@ -11,6 +11,7 @@ module.exports = {
     rootDir + '/at-symbol.coffee',
     rootDir + '/custom-namespace.coffee',
   ],
+  expectedTargetsToProcess: [],
   options: {
     globalNamespaces: ['Shopify']
   }
