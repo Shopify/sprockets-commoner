@@ -116,7 +116,7 @@ module.exports = function (context) {
     return '__commoner_module__' + escapedPath;
   }
 
-  function resolveTarget(file, path) {
+  function resolveTarget(file, path, ensureTargetIsProcessed) {
     var name = void 0;
     if (opts.globals != null && (name = opts.globals[path]) != null) {
       return name;
@@ -135,10 +135,13 @@ module.exports = function (context) {
       }
 
       if (/\.coffee$/.test(resolvedPath)) {
-        // If it's a coffee script file, look for global variable assignments
+        // If it's a coffee script file, look for global variable assignments.
         return findDeclarationInCoffeeFile(resolvedPath);
       } else {
-        // Otherwise we just look for the module by referencing its Special Identifier™
+        if (ensureTargetIsProcessed) {
+          file.metadata.targetsToProcess.push(resolvedPath);
+        }
+        // Otherwise we just look for the module by referencing its Special Identifier™.
         return pathToIdentifier(resolvedPath);
       }
     }
@@ -160,14 +163,14 @@ module.exports = function (context) {
         return;
       }
 
-      var name = resolveTarget(state.file, target);
+      var name = resolveTarget(state.file, target, true);
       if (name === false) {
         path.get('init').replaceWith(t.objectExpression([]));
-        return;
+      } else {
+        path.scope.rename(name);
+        path.scope.rename(path.node.id.name, name);
+        path.remove();
       }
-      path.scope.rename(name);
-      path.scope.rename(path.node.id.name, name);
-      path.remove();
     },
     CallExpression: function CallExpression(path, state) {
       if (!isRequire(path)) {
@@ -179,14 +182,15 @@ module.exports = function (context) {
         return;
       }
 
-      var replacement = resolveTarget(state.file, target);
       switch (path.parent.type) {
       case "ExpressionStatement":
-        // We just need to know there's a dependency, we can remove it then
+        // We just need to know there's a dependency, we can remove the `require` call.
+        resolveTarget(state.file, target, false);
         path.remove();
         break;
       default:
-        // Otherwise we just look for the module by referencing its Special Identifier™
+        // Otherwise we just look for the module by referencing its Special Identifier™.
+        var replacement = resolveTarget(state.file, target, true);
         if (replacement === false) {
           path.replaceWith(t.objectExpression([]));
         } else {
@@ -201,6 +205,9 @@ module.exports = function (context) {
     pre: function pre(file) {
       if (file.metadata.required == null) {
         file.metadata.required = [];
+      }
+      if (file.metadata.targetsToProcess == null) {
+        file.metadata.targetsToProcess = [];
       }
     },
 

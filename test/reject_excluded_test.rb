@@ -6,14 +6,18 @@ class RejectExcludedTest < MiniTest::Test
     @env.unregister_postprocessor('application/javascript', Sprockets::Commoner::Processor)
     @env.register_postprocessor('application/javascript', Sprockets::Commoner::Processor.new(
       @env.root,
-      exclude: ['reject-excluded-files/excluded.js'],
+      exclude: ['dont-reject-unused/excluded.js', 'reject-excluded-files/excluded.js'],
     ))
     @env.append_path File.join(__dir__, 'fixtures')
   end
 
   def test_excluded_file
     assert_raises Sprockets::Commoner::Processor::ExcludedFileError do
-      @env['reject-excluded-files.js'].to_s
+      assert @env['reject-excluded-files.js']
     end
+  end
+
+  def test_dont_reject_if_not_using_result
+    assert @env['dont-reject-unused.js']
   end
 end

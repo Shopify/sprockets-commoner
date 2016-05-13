@@ -1,4 +1,5 @@
 module.exports = {
   sourceRoot: __dirname,
-  expectedRequires: [__dirname + '/dep.js']
+  expectedRequires: [__dirname + '/dep.js'],
+  expectedTargetsToProcess: []
 }
