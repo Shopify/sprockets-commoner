@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.3
+
+* Only avoid imports that won't be processed by Commoner if we actually use the module.
+
 ## v0.2.2
 
 * Don't cache Babel output as this can lead to bugs.
@@ -14,6 +18,10 @@
 ## v0.2.0
 
 * Add support for requiring JSON files.
+
+## v0.1.3
+
+* Backport fixes from v0.2.3
 
 ## v0.1.2
 
