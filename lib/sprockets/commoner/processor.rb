@@ -4,10 +4,14 @@ require 'open3'
 module Sprockets
   module Commoner
     class Processor < Schmooze::Base
+
+      ExcludedFileError = Class.new(::StandardError)
+
       BABELRC_FILE = '.babelrc'.freeze
       PACKAGE_JSON = 'package.json'.freeze
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
       ALLOWED_EXTENSIONS = /\.js(?:on)?(?:\.erb)?\z/
+      COFFEE_EXTENSION = /\.coffee(:?\.erb)?\z/
 
       dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal'
 
@@ -44,7 +48,7 @@ module Sprockets
       end
 
       attr_reader :include, :exclude, :babel_exclude
-      def initialize(root, include: [root], exclude: [], babel_exclude: [/node_modules/])
+      def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/])
         @include = include.map {|path| expand_to_root(path, root) }
         @exclude = exclude.map {|path| expand_to_root(path, root) }
         @babel_exclude = babel_exclude.map {|path| expand_to_root(path, root) }
@@ -52,12 +56,6 @@ module Sprockets
       end
 
       def call(input)
-        @cache_key ||= [
-          self.class.name,
-          version,
-          VERSION,
-        ].freeze
-
         filename = input[:filename]
 
         return unless should_process?(filename)
@@ -70,12 +68,13 @@ module Sprockets
 
         babel_config = babelrc_data(filename)
 
-        result = input[:cache].fetch([filename, @cache_key, input[:data], babel_config]) do
-          transform(input[:data], options(input), paths: @env.paths)
-        end
+        result = transform(input[:data], options(input), paths: @env.paths)
 
         if result['metadata'].has_key?('required')
           result['metadata']['required'].each do |r|
+            unless COFFEE_EXTENSION =~ r || should_process?(r)
+              raise ExcludedFileError, "#{r} was imported from #{filename} but this file won't be processed by Sprockets::Commoner"
+            end
             asset = resolve(r, accept: input[:content_type], pipeline: :self)
             @required.insert(insertion_index, asset)
           end
