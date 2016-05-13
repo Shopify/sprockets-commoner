@@ -30,7 +30,7 @@ var __commoner_module__vendor_stub$admin$whatever_js = __commoner_initialize_mod
     return console.log('1337');
   });
 });
-var __commoner_module__vendor_stub$index_js = __commoner_initialize_module__(function (module, exports) {});
+var __commoner_module__vendor_stub$index_js = {};
 }();
 JS
   end

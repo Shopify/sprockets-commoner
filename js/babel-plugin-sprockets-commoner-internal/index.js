@@ -269,9 +269,21 @@ module.exports = function (context) {
 
           // Transform module to a variable assignment.
           // This variable is then referenced by any dependant children.
-          node.body = [t.variableDeclaration('var', [t.variableDeclarator(t.identifier(identifier), t.callExpression(t.identifier('__commoner_initialize_module__'), [t.functionExpression(null, [t.identifier('module'), t.identifier('exports')], t.blockStatement(node.body, node.directives))]))])];
+          var block = t.blockStatement(node.body, node.directives);
+          var f = t.functionExpression(null, [t.identifier('module'), t.identifier('exports')], block);
+          var call = t.callExpression(t.identifier('__commoner_initialize_module__'), [f]);
+          var declarator = t.variableDeclarator(t.identifier(identifier), call);
+          var declaration = t.variableDeclaration('var', [declarator]);
+
+          node.body = [declaration];
           node.directives = [];
+
+          // Rewrite calls
           path.traverse(callRewriter, state);
+
+          if (block.body.length === 0) {
+            declarator.init = t.objectExpression([]);
+          }
         }
       }
     }
