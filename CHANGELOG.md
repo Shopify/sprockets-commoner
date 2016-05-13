@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.4
+
+* Enable completely optimizing away empty module definitions.
+
 ## v0.2.3
 
 * Only avoid imports that won't be processed by Commoner if we actually use the module.
