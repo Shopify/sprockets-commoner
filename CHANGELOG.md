@@ -9,6 +9,10 @@
 
 * Add support for requiring JSON files.
 
+## v0.1.1
+
+* Backport fixes from v0.2.1
+
 ## v0.1.0
 
 * Initial version.
