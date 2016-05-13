@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.5
+
+* Add `cache_key` to processor to make sure we bust the cache when processor config changes.
+
 ## v0.2.4
 
 * Enable completely optimizing away empty module definitions.
