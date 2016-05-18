@@ -72,7 +72,7 @@ end
 
 ## Testing with Teaspoon
 
-Teaspoon is not compatible with commoner by default. Under `test/demo` you can find a demo Rails application, containing a setup with Teaspoon. The key change is a custom boot partial and JavaScript file, found under `spec/javascripts/fixtures/teaspoon/suite`. Simply copy those two files under `fixtures/teaspoon/suite` in your JavaScript tests, make necessary changes to `boot.js.erb` to point to your test files, and you should be good to go.
+Teaspoon is not compatible with commoner by default. Under `test/demo` you can find a demo Rails application, containing a setup with Teaspoon. The key change is a gem called `teaspoon-bundle`, which contains a custom boot partial. Simple add `teaspoon-bundle` to your Gemfile and add `suite.boot_partial = 'bundle_boot'` in your `teaspoon_env.rb`, and you should be good to go!
 
 ## CoffeeScript interoperability
 
