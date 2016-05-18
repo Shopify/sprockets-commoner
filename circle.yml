@@ -6,8 +6,8 @@ machine:
 
 dependencies:
   override:
-    - script/setup
+    - bin/setup
 
 test:
   override:
-    - script/test
+    - bin/test
