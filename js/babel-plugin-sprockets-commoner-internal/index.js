@@ -167,9 +167,12 @@ module.exports = function (context) {
       if (name === false) {
         path.get('init').replaceWith(t.objectExpression([]));
       } else {
-        path.scope.rename(name);
+        if (path.scope.hasBinding(name)) {
+          path.scope.rename(name);
+        }
         path.scope.rename(path.node.id.name, name);
         path.remove();
+        path.scope.removeBinding(name);
       }
     },
     CallExpression: function CallExpression(path, state) {

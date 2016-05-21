@@ -7,7 +7,7 @@ module Sprockets
 
       ExcludedFileError = Class.new(::StandardError)
 
-      VERSION = '1'.freeze
+      VERSION = '2'.freeze
       BABELRC_FILE = '.babelrc'.freeze
       PACKAGE_JSON = 'package.json'.freeze
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
