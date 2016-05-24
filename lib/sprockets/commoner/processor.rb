@@ -65,6 +65,7 @@ module Sprockets
           @include.map(&:to_s),
           @exclude.map(&:to_s),
           @babel_exclude.map(&:to_s),
+          @extra_options,
         ]
       end
 
