@@ -2,3 +2,4 @@
 
 require('react/lib/ReactContext');
 require('babel-core');
+require('stream');

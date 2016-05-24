@@ -29,6 +29,50 @@ var join = require('path').join;
 var resolve = require('browser-resolve').sync;
 var emptyModule = join(__dirname, 'node_modules', 'browser-resolve', 'empty.js');
 
+// built in modules to shim
+// These are from browserify, and will need to be installed manually
+// by the user to be able to use them in their application.
+var BUILTINS = {
+  assert: 'assert/',
+  buffer: 'buffer/',
+  child_process: false,
+  cluster: false,
+  console: 'console-browserify',
+  constants: 'constants-browserify',
+  crypto: 'crypto-browserify',
+  dgram: false,
+  dns: false,
+  domain: 'domain-browser',
+  events: 'events/',
+  fs: false,
+  http: 'stream-http',
+  https: 'https-browserify',
+  module: false,
+  net: false,
+  os: 'os-browserify/browser.js',
+  path: 'path-browserify',
+  punycode: 'punycode/',
+  querystring: 'querystring-es3/',
+  readline: false,
+  repl: false,
+  stream: 'stream-browserify',
+  _stream_duplex: 'readable-stream/duplex.js',
+  _stream_passthrough: 'readable-stream/passthrough.js',
+  _stream_readable: 'readable-stream/readable.js',
+  _stream_transform: 'readable-stream/transform.js',
+  _stream_writable: 'readable-stream/writable.js',
+  string_decoder: 'string_decoder/',
+  sys: 'util/util.js',
+  timers: 'timers-browserify',
+  tls: false,
+  tty: 'tty-browserify',
+  url: 'url/',
+  util: 'util/util.js',
+  vm: 'vm-browserify',
+  zlib: 'browserify-zlib',
+  _process: 'process/browser'
+};
+
 module.exports = function (context) {
   var t = context.types;
   var exposeTemplate = context.template("$0 = exports['default'] != null ? exports['default'] : exports;");
@@ -117,16 +161,18 @@ module.exports = function (context) {
   }
 
   function resolveTarget(file, path, ensureTargetIsProcessed) {
-    var name = void 0;
-    if (opts.globals != null && (name = opts.globals[path]) != null) {
-      return name;
+    if (path === false) {
+      return false;
+    }
+    var alias;
+    if (opts.globals.hasOwnProperty(path)) {
+      return opts.globals[path];
     } else if (opts.moduleShim.hasOwnProperty(path)) {
-      var alias = opts.moduleShim[path];
-      if (alias === false) {
-        return false;
-      } else {
-        return resolveTarget(file, alias, ensureTargetIsProcessed);
-      }
+      alias = opts.moduleShim[path];
+      return resolveTarget(file, alias, ensureTargetIsProcessed);
+    } else if (BUILTINS.hasOwnProperty(path)) {
+      alias = BUILTINS[path];
+      return resolveTarget(file, alias, ensureTargetIsProcessed);
     } else {
       var resolvedPath = resolve(path, opts);
       if (resolvedPath === emptyModule) {
@@ -256,6 +302,7 @@ module.exports = function (context) {
           // Get options from commoner-options and merge them with the options
           // that were passed to this plugin in .babelrc
           opts = {
+            globals: {},
             globalNamespaces: [],
             // We can get these from Sprockets
             extensions: ['.js', '.json', '.coffee', '.js.erb', '.coffee.erb'],
