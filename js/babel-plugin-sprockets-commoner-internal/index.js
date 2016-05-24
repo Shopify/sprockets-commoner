@@ -254,6 +254,25 @@ module.exports = function (context) {
         }
         break;
       }
+    },
+    Identifier: function Identifier(path, state) {
+      if (
+        (path.node.name === 'process' || path.node.name === 'Buffer')
+        && (
+          path.parent.type !== 'MemberExpression'
+          || path.parentKey === 'object'
+        )
+        && !path.scope.hasBinding(path.node.name)
+      ) {
+        if (path.node.name === 'process') {
+          path.replaceWith(t.identifier(resolveTarget(state.file, '_process', true)));
+        } else if (path.node.name === 'Buffer') {
+          path.replaceWith(t.memberExpression(
+            t.identifier(resolveTarget(state.file, 'buffer', true)),
+            t.identifier('Buffer')
+          ));
+        }
+      }
     }
   };
 
