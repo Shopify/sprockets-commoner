@@ -120,6 +120,13 @@ module.exports = function (context) {
     var name = void 0;
     if (opts.globals != null && (name = opts.globals[path]) != null) {
       return name;
+    } else if (opts.moduleShim.hasOwnProperty(path)) {
+      var alias = opts.moduleShim[path];
+      if (alias === false) {
+        return false;
+      } else {
+        return resolveTarget(file, alias, ensureTargetIsProcessed);
+      }
     } else {
       var resolvedPath = resolve(path, opts);
       if (resolvedPath === emptyModule) {
@@ -251,7 +258,9 @@ module.exports = function (context) {
           opts = {
             globalNamespaces: [],
             // We can get these from Sprockets
-            extensions: ['.js', '.json', '.coffee', '.js.erb', '.coffee.erb']
+            extensions: ['.js', '.json', '.coffee', '.js.erb', '.coffee.erb'],
+            // We can alias modules to other modules for any reason we'd like
+            moduleShim: {}
           };
 
           // Look for the sprockets-commoner plugin for extra options

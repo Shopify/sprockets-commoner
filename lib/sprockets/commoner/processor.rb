@@ -47,11 +47,13 @@ module Sprockets
         instance(input[:environment]).call(input)
       end
 
-      attr_reader :include, :exclude, :babel_exclude
-      def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/])
+      attr_reader :include, :exclude, :babel_exclude, :extra_options
+
+      def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/], **extra_options)
         @include = include.map {|path| expand_to_root(path, root) }
         @exclude = exclude.map {|path| expand_to_root(path, root) }
         @babel_exclude = babel_exclude.map {|path| expand_to_root(path, root) }
+        @extra_options = extra_options
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
       end
 
@@ -79,7 +81,7 @@ module Sprockets
 
         babel_config = babelrc_data(filename)
 
-        result = transform(input[:data], options(input), paths: @env.paths)
+        result = transform(input[:data], options(input), paths: @env.paths, **extra_options)
 
         if result['metadata'].has_key?('targetsToProcess')
           result['metadata']['targetsToProcess'].each do |t|
