@@ -251,7 +251,7 @@ module.exports = function (context) {
           opts = {
             globalNamespaces: [],
             // We can get these from Sprockets
-            extensions: ['.js', '.json', '.coffee', '.js.erb', '.coffee.erb']
+            extensions: ['.js', '.jsx', '.json', '.coffee', '.js.erb', '.jsx.erb', '.coffee.erb']
           };
 
           // Look for the sprockets-commoner plugin for extra options
