@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.6
+
+* Make sure we don't rename a bound file if the same file is required multiple times. Fixes [#19](https://github.com/Shopify/sprockets-commoner/issues/19).
+
 ## v0.2.5
 
 * Add `cache_key` to processor to make sure we bust the cache when processor config changes.
