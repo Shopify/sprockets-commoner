@@ -9,6 +9,11 @@
     "babel-core": "^6.2.1",
     "babel-plugin-transform-es2015-arrow-functions": "^6.5.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.2.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "stream-browserify": "^2.0.1",
+    "process": "0.11.3"
+  },
+  "dependencies": {
+    "buffer": "4.6.0"
   }
 }

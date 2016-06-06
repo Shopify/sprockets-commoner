@@ -6,4 +6,8 @@ require 'sprockets/commoner'
 
 require 'pry'
 
-Pry.start
+env = Sprockets::Environment.new(File.expand_path('../tmp/env', __dir__))
+env.append_path File.expand_path('../tmp/env/assets', __dir__)
+$stderr.puts "'env' has been set up"
+
+binding.pry
