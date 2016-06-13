@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.7
+
+* Upgrade vendored `browser-resolve` to latest version to ensure compatibility with Node v6.
+
 ## v0.2.6
 
 * Make sure we don't rename a bound file if the same file is required multiple times. Fixes [#19](https://github.com/Shopify/sprockets-commoner/issues/19).
