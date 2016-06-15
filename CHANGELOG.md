@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.8
+
+* Modified the `cache_key` method of processor to not spin up a node process, but instead read the package.json directly.
+
 ## v0.2.7
 
 * Upgrade vendored `browser-resolve` to latest version to ensure compatibility with Node v6.
