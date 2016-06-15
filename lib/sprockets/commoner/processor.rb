@@ -59,7 +59,6 @@ module Sprockets
         @cache_key ||= [
           self.class.name,
           VERSION,
-          version,
           @include.map(&:to_s),
           @exclude.map(&:to_s),
           @babel_exclude.map(&:to_s),
