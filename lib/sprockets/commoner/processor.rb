@@ -49,6 +49,7 @@ module Sprockets
 
       attr_reader :include, :exclude, :babel_exclude
       def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/])
+        @root = root
         @include = include.map {|path| expand_to_root(path, root) }
         @exclude = exclude.map {|path| expand_to_root(path, root) }
         @babel_exclude = babel_exclude.map {|path| expand_to_root(path, root) }
@@ -56,13 +57,7 @@ module Sprockets
       end
 
       def cache_key
-        @cache_key ||= [
-          self.class.name,
-          VERSION,
-          @include.map(&:to_s),
-          @exclude.map(&:to_s),
-          @babel_exclude.map(&:to_s),
-        ]
+        @cache_key ||= compute_cache_key
       end
 
       def call(input)
@@ -106,6 +101,21 @@ module Sprockets
       end
 
       private
+        def compute_cache_key
+          package_file = File.join(@root, 'node_modules', 'babel-core', 'package.json')
+          raise Schmooze::DependencyError, 'Cannot determine babel version as babel-core has not been installed' unless File.exist?(package_file)
+          package = JSON.parse(File.read(package_file))
+
+          [
+            self.class.name,
+            VERSION,
+            package['version'],
+            @include.map(&:to_s),
+            @exclude.map(&:to_s),
+            @babel_exclude.map(&:to_s),
+          ]
+        end
+
         def expand_to_root(path, root)
           if path.is_a?(String)
             File.expand_path(path, root)
