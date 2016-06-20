@@ -47,6 +47,15 @@ module Sprockets
         instance(input[:environment]).call(input)
       end
 
+      def self.configure(env, *args, **kwargs)
+        env.postprocessors['application/javascript'].each do |processor|
+          if processor == self || processor.is_a?(self)
+            env.unregister_postprocessor('application/javascript', processor)
+          end
+        end
+        env.register_postprocessor('application/javascript', self.new(env.root, *args, **kwargs))
+      end
+
       attr_reader :include, :exclude, :babel_exclude
       def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/])
         @root = root

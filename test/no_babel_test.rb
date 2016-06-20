@@ -3,11 +3,7 @@ require 'test_helper'
 class NoBabelTest < MiniTest::Test
   def setup
     @env = Sprockets::Environment.new(File.join(__dir__, 'fixtures'))
-    @env.unregister_postprocessor('application/javascript', Sprockets::Commoner::Processor)
-    @env.register_postprocessor('application/javascript', Sprockets::Commoner::Processor.new(
-      @env.root,
-      exclude: ['nobabelrc/index.js'],
-    ))
+    Sprockets::Commoner::Processor.configure(@env, exclude: ['nobabelrc/index.js'])
     @env.append_path File.join(__dir__, 'fixtures')
   end
 

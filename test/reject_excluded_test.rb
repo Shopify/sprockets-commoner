@@ -3,11 +3,7 @@ require 'test_helper'
 class RejectExcludedTest < MiniTest::Test
   def setup
     @env = Sprockets::Environment.new(File.join(__dir__, 'fixtures'))
-    @env.unregister_postprocessor('application/javascript', Sprockets::Commoner::Processor)
-    @env.register_postprocessor('application/javascript', Sprockets::Commoner::Processor.new(
-      @env.root,
-      exclude: ['dont-reject-unused/excluded.js', 'reject-excluded-files/excluded.js'],
-    ))
+    Sprockets::Commoner::Processor.configure(@env, exclude: ['dont-reject-unused/excluded.js', 'reject-excluded-files/excluded.js'])
     @env.append_path File.join(__dir__, 'fixtures')
   end
 
