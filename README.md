@@ -55,9 +55,7 @@ By default, commoner will process any file under the application root directory.
 ```ruby
 # In config/initializers/sprockets_commoner.rb
 Rails.application.config.assets.configure do |env|
-  env.unregister_postprocessor('application/javascript', Sprockets::Commoner::Processor)
-  env.register_postprocessor('application/javascript', Sprockets::Commoner::Processor.new(
-    env.root,
+  Sprockets::Commoner::Processor.configure(env,
     # include, exclude, and babel_exclude patterns can be path prefixes or regexes.
     # Explicitely list paths to include. The default is `[env.root]`
     include: ['app/assets/javascripts/subdirectory'],
@@ -66,7 +64,7 @@ Rails.application.config.assets.configure do |env|
     # Anything listed in babel_exclude has its require calls resolved, but no transforms listed in .babelrcs applied.
     # Default is [/node_modules/]
     babel_exclude: [/node_modules/]
-  ))
+  )
 end
 ```
 
