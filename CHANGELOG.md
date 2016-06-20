@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.0
+
+* Added `Sprockets::Commoner::Processor.configure` method to simplify setup.
+
 ## v0.2.8
 
 * Modified the `cache_key` method of processor to not spin up a node process, but instead read the package.json directly.
