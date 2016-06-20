@@ -160,7 +160,6 @@ var __commoner_module__coffee_first$included_js = __commoner_initialize_module__
   console.log(window.Included);
 
 }).call(this);
-
 }();
     JS
   end

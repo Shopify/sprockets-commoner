@@ -32,7 +32,6 @@ var global = window;
 JS
 
       OUTRO = <<-JS.freeze
-
 }();
 JS
       def self.instance(env)
