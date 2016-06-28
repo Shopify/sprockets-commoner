@@ -47,12 +47,16 @@ module Sprockets
         instance(input[:environment]).call(input)
       end
 
-      def self.configure(env, *args, **kwargs)
+      def self.unregister(env)
         env.postprocessors['application/javascript'].each do |processor|
           if processor == self || processor.is_a?(self)
             env.unregister_postprocessor('application/javascript', processor)
           end
         end
+      end
+
+      def self.configure(env, *args, **kwargs)
+        unregister(env)
         env.register_postprocessor('application/javascript', self.new(env.root, *args, **kwargs))
       end
 
