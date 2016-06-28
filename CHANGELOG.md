@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.0
+
+* Added `Sprockets::Commoner::Processor.unregister` method to remove the processor.
+
 ## v0.3.0
 
 * Added `Sprockets::Commoner::Processor.configure` method to simplify setup.
