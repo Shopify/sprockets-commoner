@@ -60,12 +60,13 @@ module Sprockets
         env.register_postprocessor('application/javascript', self.new(env.root, *args, **kwargs))
       end
 
-      attr_reader :include, :exclude, :babel_exclude
-      def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/])
+      attr_reader :include, :exclude, :babel_exclude, :transform_options
+      def initialize(root, include: [root], exclude: ['vendor/bundle'], babel_exclude: [/node_modules/], transform_options: [])
         @root = root
         @include = include.map {|path| expand_to_root(path, root) }
         @exclude = exclude.map {|path| expand_to_root(path, root) }
         @babel_exclude = babel_exclude.map {|path| expand_to_root(path, root) }
+        @transform_options = transform_options.map {|(path, options)| [expand_to_root(path, root), options]}
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
       end
 
@@ -83,10 +84,8 @@ module Sprockets
         insertion_index = @required.index(input[:uri]) || -1
         @dependencies = Set.new(input[:metadata][:dependencies])
 
-
         babel_config = babelrc_data(filename)
-
-        result = transform(input[:data], options(input), paths: @env.paths)
+        result = transform(input[:data], options(input), commoner_options(input))
 
         if result['metadata'].has_key?('targetsToProcess')
           result['metadata']['targetsToProcess'].each do |t|
@@ -126,6 +125,7 @@ module Sprockets
             @include.map(&:to_s),
             @exclude.map(&:to_s),
             @babel_exclude.map(&:to_s),
+            @transform_options.map { |(pattern, opts)| [pattern.to_s, opts] },
           ]
         end
 
@@ -181,6 +181,15 @@ module Sprockets
           return JSON.parse(File.read(filename))['babel']
         rescue Errno::ENOENT
           return nil
+        end
+
+        def commoner_options(input)
+          options = {}
+          transform_options.each do |(path, opts)|
+            options.merge!(opts) if pattern_match(path, input[:filename])
+          end
+          options[:paths] = @env.paths
+          options
         end
 
         def options(input)
