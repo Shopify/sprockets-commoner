@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.0
+
+* Added (currently undocumented) `transform_options` argument to `Processor`.
+* Removed undocumented babelrc configuration method.
+
 ## v0.4.0
 
 * Added `Sprockets::Commoner::Processor.unregister` method to remove the processor.
