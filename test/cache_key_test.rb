@@ -3,11 +3,22 @@ require 'test_helper'
 class CacheKeyTest < MiniTest::Test
   def setup
     @dir = File.join(__dir__, 'fixtures')
-    @processor = Sprockets::Commoner::Processor.new(@dir)
   end
 
-  def test_cache_key
-    assert_equal ['Sprockets::Commoner::Processor', '2', '6.9.1', [@dir], [File.join(@dir, 'vendor/bundle')], [/node_modules/.to_s]], @processor.cache_key
+  def test_default_cache_key
+    processor = Sprockets::Commoner::Processor.new(@dir)
+    assert_equal ['Sprockets::Commoner::Processor', '2', '6.9.1', [@dir], [File.join(@dir, 'vendor/bundle')], [/node_modules/.to_s], []], processor.cache_key
+  end
+
+  def test_opts_cache_key
+    processor = Sprockets::Commoner::Processor.new(@dir, transform_options: {
+      /index.js$/ => {
+        globals: {
+          'jquery' => '$'
+        }
+      }
+    })
+    assert_equal ['Sprockets::Commoner::Processor', '2', '6.9.1', [@dir], [File.join(@dir, 'vendor/bundle')], [/node_modules/.to_s], [[/index.js$/.to_s, {globals: {'jquery' => '$'}}]]], processor.cache_key
   end
 
   def test_babel_missing_cache_key

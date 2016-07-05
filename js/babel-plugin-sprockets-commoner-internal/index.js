@@ -254,15 +254,6 @@ module.exports = function (context) {
             extensions: ['.js', '.json', '.coffee', '.js.erb', '.coffee.erb']
           };
 
-          // Look for the sprockets-commoner plugin for extra options
-          state.file.opts.plugins.map(function (plugin) {
-            return plugin[1];
-          }).filter(function (opts) {
-            return opts != null && opts.__commoner_options;
-          }).forEach(function (plugin) {
-            return Object.assign(opts, plugin);
-          });
-
           Object.assign(opts, state.opts, { basedir: dirname(state.file.opts.filename) });
           rootRegex = new RegExp('^' + state.file.opts.sourceRoot + '/');
           identifierRegex = createIdentifierRegex();
