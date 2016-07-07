@@ -56,7 +56,7 @@ module.exports = function (context) {
    * If we're requiring a CoffeeScript file, we're going to be assuming that we're assigning to the global namespace in that file.
    * so, use a RegExp to find out that variable definition. (yep)
    */
-  function findDeclarationInCoffeeFile(path) {
+  function findDeclarationInCoffeeFile(path, ensureIdentifierIsPresent) {
     var contents = fs.readFileSync(path);
     var identifiers = [];
 
@@ -65,6 +65,9 @@ module.exports = function (context) {
     }
 
     if (identifiers.length === 0) {
+      if (ensureIdentifierIsPresent) {
+        throw new Error('No identifier found in ' + path);
+      }
       return false;
     } else if (identifiers.length > 1) {
       throw new Error('Multiple identifiers found in ' + path);
@@ -136,7 +139,7 @@ module.exports = function (context) {
 
       if (/\.coffee$/.test(resolvedPath)) {
         // If it's a coffee script file, look for global variable assignments.
-        return findDeclarationInCoffeeFile(resolvedPath);
+        return findDeclarationInCoffeeFile(resolvedPath, ensureTargetIsProcessed);
       } else {
         if (ensureTargetIsProcessed) {
           file.metadata.targetsToProcess.push(resolvedPath);

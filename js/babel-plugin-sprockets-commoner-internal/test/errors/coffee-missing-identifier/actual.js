@@ -1,0 +1,1 @@
+var Something = require('./nothing');
