@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.1
+
+* Make sure we error out if an identifier is requested from a CoffeeScript file and there is none present.
+
 ## v0.5.0
 
 * Added (currently undocumented) `transform_options` argument to `Processor`.
