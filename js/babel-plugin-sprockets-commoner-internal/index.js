@@ -28,6 +28,7 @@ var dirname = require('path').dirname;
 var join = require('path').join;
 var resolve = require('browser-resolve').sync;
 var emptyModule = join(__dirname, 'node_modules', 'browser-resolve', 'empty.js');
+var pathToIdentifier = require('./path-to-identifier');
 
 module.exports = function (context) {
   var t = context.types;
@@ -106,19 +107,6 @@ module.exports = function (context) {
     return null;
   }
 
-
-  // Transform a path into a variable name
-  function pathToIdentifier(path) {
-    var escapedPath = path.replace(rootRegex, '').replace(/[^a-zA-Z0-9_]/g, function (match) {
-      if (match === '/') {
-        return '$';
-      } else {
-        return '_';
-      }
-    });
-    return '__commoner_module__' + escapedPath;
-  }
-
   function resolveTarget(file, path, ensureTargetIsProcessed) {
     var name = void 0;
     if (opts.globals != null && (name = opts.globals[path]) != null) {
@@ -145,7 +133,7 @@ module.exports = function (context) {
           file.metadata.targetsToProcess.push(resolvedPath);
         }
         // Otherwise we just look for the module by referencing its Special Identifier™.
-        return pathToIdentifier(resolvedPath);
+        return pathToIdentifier(resolvedPath.replace(rootRegex, ''));
       }
     }
   }
@@ -265,10 +253,11 @@ module.exports = function (context) {
           state.file.metadata.commonerEnabled = true;
 
           var node = path.node;
-          var identifier = pathToIdentifier(state.file.opts.filename);
+          var identifier = pathToIdentifier(state.file.opts.filename.replace(rootRegex, ''));
           var expose = findExpose(node.directives);
           if (expose != null) {
             node.body.push(exposeTemplate(t.identifier(expose)));
+            state.file.metadata.globalIdentifier = expose;
           }
 
           // Transform module to a variable assignment.

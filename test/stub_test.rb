@@ -27,14 +27,17 @@ var __commoner_helper__interopRequireDefault = function (obj) {
   return obj && obj.__esModule ? obj : {
     default: obj
   };
-};
+},
+    __commoner_module__vendor_stub$stubme_js = window.Important;
 var __commoner_module__vendor_stub$admin$whatever_js = __commoner_initialize_module__(function (module, exports) {
   'use strict';
 
   var _jquery2 = __commoner_helper__interopRequireDefault($);
 
+  var _stubme2 = __commoner_helper__interopRequireDefault(__commoner_module__vendor_stub$stubme_js);
+
   (0, _jquery2.default)(function () {
-    return console.log('1337');
+    return console.log('1337', _stubme2.default);
   });
 });
 var __commoner_module__vendor_stub$index_js = {};

@@ -87,19 +87,17 @@ module Sprockets
         babel_config = babelrc_data(filename)
         result = transform(input[:data], options(input), commoner_options(input))
 
-        if result['metadata'].has_key?('targetsToProcess')
-          result['metadata']['targetsToProcess'].each do |t|
-            unless should_process?(t)
-              raise ExcludedFileError, "#{t} was imported from #{filename} but this file won't be processed by Sprockets::Commoner"
-            end
+        commoner_required = Set.new(input[:metadata][:commoner_required])
+        result['metadata']['targetsToProcess'].each do |t|
+          unless should_process?(t)
+            raise ExcludedFileError, "#{t} was imported from #{filename} but this file won't be processed by Sprockets::Commoner"
           end
+          commoner_required.add(t)
         end
 
-        if result['metadata'].has_key?('required')
-          result['metadata']['required'].each do |r|
-            asset = resolve(r, accept: input[:content_type], pipeline: :self)
-            @required.insert(insertion_index, asset)
-          end
+        result['metadata']['required'].each do |r|
+          asset = resolve(r, accept: input[:content_type], pipeline: :self)
+          @required.insert(insertion_index, asset)
         end
 
         {
@@ -107,6 +105,8 @@ module Sprockets
           dependencies: @dependencies,
           required: Set.new(@required),
 
+          commoner_global_identifier: result['metadata']['globalIdentifier'],
+          commoner_required: commoner_required,
           commoner_used_helpers: Set.new(input[:metadata][:commoner_used_helpers]) + result['metadata']['usedHelpers'],
           commoner_enabled: input[:metadata][:commoner_enabled] | result['metadata']['commonerEnabled'],
         }
