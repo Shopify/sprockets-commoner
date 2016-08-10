@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.0
+
+* Adds support for resolving files in other bundles to global variables.
+
 ## v0.5.1
 
 * Make sure we error out if an identifier is requested from a CoffeeScript file and there is none present.
