@@ -7,7 +7,7 @@ module Sprockets
 
       ExcludedFileError = Class.new(::StandardError)
 
-      VERSION = '2'.freeze
+      VERSION = '3'.freeze
       BABELRC_FILE = '.babelrc'.freeze
       PACKAGE_JSON = 'package.json'.freeze
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
@@ -98,6 +98,10 @@ module Sprockets
         result['metadata']['required'].each do |r|
           asset = resolve(r, accept: input[:content_type], pipeline: :self)
           @required.insert(insertion_index, asset)
+        end
+
+        result['metadata']['includedEnvironmentVariables'].each do |env|
+          @dependencies << "commoner-environment-variable:#{env}"
         end
 
         {

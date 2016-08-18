@@ -46,6 +46,9 @@ describe('babel-plugin-sprockets-commoner-internal', function() {
       if (options.expectedTargetsToProcess != null) {
         assert.deepEqual(options.expectedTargetsToProcess, result.metadata.targetsToProcess);
       }
+      if (options.expectedIncludedEnvironmentVariables) {
+        assert.deepEqual(options.expectedIncludedEnvironmentVariables, result.metadata.includedEnvironmentVariables);
+      }
     });
   });
 

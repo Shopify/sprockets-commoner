@@ -13,6 +13,10 @@ module Sprockets
   register_bundle_metadata_reducer 'application/javascript', :commoner_required, Set.new, :+
   register_bundle_metadata_reducer 'application/javascript', :commoner_used_helpers, Set.new, :+
   register_bundle_processor 'application/javascript', ::Sprockets::Commoner::Bundle
+  register_dependency_resolver 'commoner-environment-variable' do |env, str|
+    _, variable = str.split(':', 2)
+    ENV[variable]
+  end
 end
 
 require 'sprockets/commoner/railtie' if defined?(Rails)
