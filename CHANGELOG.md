@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.1
+
+* Ensure a file's cache is busted if it depends on an environment variable.
+
 ## v0.6.0
 
 * Adds support for resolving files in other bundles to global variables.
