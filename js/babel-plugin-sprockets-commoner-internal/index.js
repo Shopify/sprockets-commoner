@@ -203,13 +203,17 @@ module.exports = function (context) {
       if (file.metadata.targetsToProcess == null) {
         file.metadata.targetsToProcess = [];
       }
+      if (file.metadata.includedEnvironmentVariables == null) {
+        file.metadata.includedEnvironmentVariables = [];
+      }
     },
 
     visitor: {
-      MemberExpression: function MemberExpression(path) {
+      MemberExpression: function MemberExpression(path, state) {
         if (path.get("object").matchesPattern("process.env")) {
           var key = path.toComputedKey();
           if (t.isStringLiteral(key)) {
+            state.file.metadata.includedEnvironmentVariables.push(key.value);
             path.replaceWith(t.valueToNode(process.env[key.value]));
           }
         }
