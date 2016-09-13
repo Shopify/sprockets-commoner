@@ -63,7 +63,11 @@ JS
         assets_missing = input[:metadata][:commoner_required] - assets_in_bundle
 
         global_identifiers = assets_missing.map do |filename|
-          uri, _ = env.resolve(filename, type: input[:content_type], pipeline: :self, compat: false)
+          uri, _ = if Sprockets::VERSION < '4'
+            env.resolve(filename, accept: input[:content_type], pipeline: :self, compat: false)
+          else
+            env.resolve(filename, accept: input[:content_type], pipeline: :self)
+          end
           asset = env.load(uri)
           # Retrieve the global variable the file is exposed through
           global = asset.metadata[:commoner_global_identifier]
