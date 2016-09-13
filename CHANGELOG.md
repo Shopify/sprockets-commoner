@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.2
+
+* Add support for Sprockets 4
+
 ## v0.6.1
 
 * Ensure a file's cache is busted if it depends on an environment variable.
