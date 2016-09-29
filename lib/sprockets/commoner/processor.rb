@@ -104,10 +104,13 @@ module Sprockets
           @dependencies << "commoner-environment-variable:#{env}"
         end
 
+        map = process_map(input[:metadata][:map], result['map'])
+
         {
           data: result['code'],
           dependencies: @dependencies,
           required: Set.new(@required),
+          map: map,
 
           commoner_global_identifier: result['metadata']['globalIdentifier'],
           commoner_required: commoner_required,
@@ -117,6 +120,13 @@ module Sprockets
       end
 
       private
+        def process_map(oldmap, map)
+          if Commoner.sprockets4?
+            map = Sprockets::SourceMapUtils.decode_vlq_mappings(map['mappings'], sources: map['sources'], names: map['names'])
+            map = Sprockets::SourceMapUtils.combine_source_maps(oldmap, map)
+          end
+        end
+
         def compute_cache_key
           package_file = File.join(@root, 'node_modules', 'babel-core', 'package.json')
           raise Schmooze::DependencyError, 'Cannot determine babel version as babel-core has not been installed' unless File.exist?(package_file)
@@ -197,7 +207,6 @@ module Sprockets
         end
 
         def options(input)
-          # TODO(bouk): Fix sourcemaps. Sourcemaps are only available in Sprockets v4
           {
             'ast' => false,
             'babelrc' => !match_any?(self.babel_exclude, input[:filename]),
@@ -205,6 +214,7 @@ module Sprockets
             'filenameRelative' => PathUtils.split_subpath(input[:load_path], input[:filename]),
             'moduleRoot' => nil,
             'sourceRoot' => @env.root,
+            'sourceMaps' => Commoner.sprockets4?,
           }
         end
 
