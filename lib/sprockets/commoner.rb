@@ -5,6 +5,9 @@ require 'sprockets/commoner/bundle'
 
 module Sprockets
   module Commoner
+    def self.sprockets4?
+      @@sprockets4 ||= Gem::Version.new(Sprockets::VERSION) >= Gem::Version.new('4.0.0.beta')
+    end
   end
 
   register_postprocessor 'application/javascript', ::Sprockets::Commoner::Processor
