@@ -78,17 +78,25 @@ JS
         used_helpers = input[:metadata][:commoner_used_helpers].to_a
         header_code = generate_header(used_helpers, global_identifiers)
         {
-          data: "#{PRELUDE}#{header_code}\n#{input[:data]}#{OUTRO}",
-          map:  shift_map(input[:metadata][:map], PRELUDE.lines.count + header_code.lines.count),
+          data: "#{PRELUDE}#{header_code}\n#{input[:data]}\n#{OUTRO}",
+          map:  shift_map(input[:metadata][:map], PRELUDE.lines.count + header_code.lines.count, OUTRO.lines.count),
         }
       end
 
       private
 
-      def shift_map(map, offset)
-        map && map.map do |m|
-          m.merge(generated: [m[:generated][0] + offset, m[:generated][1]])
+      def shift_map(map, before, after)
+        if map["sections"]
+          map["sections"].first["map"]["mappings"].prepend ';'*before
+          map["sections"][1..-1].each do |section|
+            section["offset"]["line"] += before
+          end
+          map["sections"].last["map"]["mappings"] += ';'*after
+        else
+          map["mappings"].prepend ';'*before
+          map["mappings"] += ';'*after
         end
+        map
       end
     end
   end
