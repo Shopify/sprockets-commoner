@@ -7,17 +7,17 @@ class AllowedExtensionsTest < MiniTest::Test
   end
 
   def test_allowed_extensions
-    assert @processor.send('should_process?', 'my-lib.js')
-    assert @processor.send('should_process?', 'my-lib.js.erb')
-    assert @processor.send('should_process?', 'my-lib.json')
-    assert @processor.send('should_process?', 'my-lib.json.erb')
-    assert @processor.send('should_process?', 'myComponent.jsx')
-    assert @processor.send('should_process?', 'myComponent.jsx.erb')
+    assert @processor.send('should_process?', "#{@env.root}/my-lib.js")
+    assert @processor.send('should_process?', "#{@env.root}/my-lib.js.erb")
+    assert @processor.send('should_process?', "#{@env.root}/my-lib.json")
+    assert @processor.send('should_process?', "#{@env.root}/my-lib.json.erb")
+    assert @processor.send('should_process?', "#{@env.root}/myComponent.jsx")
+    assert @processor.send('should_process?', "#{@env.root}/myComponent.jsx.erb")
   end
 
   def test_forbidden_extensions
-    assert !@processor.send('should_process?', 'my-lib.jso')
-    assert !@processor.send('should_process?', 'my-lib.jsxon')
-    assert !@processor.send('should_process?', 'my-lib.jsonx')
+    assert !@processor.send('should_process?', "#{@env.root}/my-lib.jso")
+    assert !@processor.send('should_process?', "#{@env.root}/my-lib.jsxon")
+    assert !@processor.send('should_process?', "#{@env.root}/my-lib.jsonx")
   end
 end
