@@ -11,7 +11,7 @@ module Sprockets
       BABELRC_FILE = '.babelrc'.freeze
       PACKAGE_JSON = 'package.json'.freeze
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
-      ALLOWED_EXTENSIONS = /\.js(?:on)?(?:\.erb)?\z/
+      ALLOWED_EXTENSIONS = /\.js(?:on|x)?(?:\.erb)?\z/
 
       dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal'
 

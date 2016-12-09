@@ -242,7 +242,7 @@ module.exports = function (context) {
           opts = {
             globalNamespaces: [],
             // We can get these from Sprockets
-            extensions: ['.js', '.json', '.coffee', '.js.erb', '.coffee.erb']
+            extensions: ['.js', '.jsx', '.json', '.coffee', '.js.erb', '.jsx.erb', '.coffee.erb']
           };
 
           Object.assign(opts, state.opts, { basedir: dirname(state.file.opts.filename) });
