@@ -17,7 +17,7 @@
 ### Requirements
 
 1. Ruby v2+.
-2. Rails/Any other application that uses Sprockets.
+2. Rails 4+/Any other application that uses Sprockets 3+.
 2. NPM v3+. We only support version 3 because commoner doesn't do any sort of deduplication of dependencies, so you could end up with a huge bundle if you don't want out. We only test against version 3, so you will definitely run into issues when running version 2.
 3. We recommend and support version 4+ of Node.js.
 
