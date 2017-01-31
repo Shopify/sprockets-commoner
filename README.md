@@ -37,7 +37,7 @@ console.log(_.map([1, 2, 3], function(n) { return n * 3; }));
 ### Enabling Babel transforms
 
 1. Install any Babel plugins or presets you want to use. We'll use the default ES2015 preset; `npm install babel-preset-es2015`.
-1. Add a `.babelrc` with you required configuration. We just need to do `echo '{presets: ["es2015"]}' > .babelrc`.
+1. Add a `.babelrc` with you required configuration. We just need to do `echo '{"presets": ["es2015"]}' > .babelrc`.
 1. Use any feature you want! For example, let's use `import` and arrow functions in our `application.js`:
 
 ```javascript
