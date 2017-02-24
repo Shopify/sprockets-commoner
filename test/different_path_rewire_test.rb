@@ -9,13 +9,12 @@ class DifferentPathRewireTest < MiniTest::Test
   def test_load_file
     assert asset = @env['absolute.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 
 var __commoner_module__different_path$absolute$second_js = __commoner_initialize_module__(function (module, exports) {
   "use strict";
@@ -27,7 +26,7 @@ var __commoner_module__different_path$absolute$index_js = __commoner_initialize_
 
   console.log(2);
 });
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
 JS
   end
 end

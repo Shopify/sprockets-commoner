@@ -20,7 +20,7 @@ class SourceMapsTest < MiniTest::Test
       "file" => "scripts/index.js",
       "sections"=> [{
         "offset" => {
-          "line" => 34,
+          "line" => 33,
           "column" => 0
         },
         "map" => {
@@ -32,7 +32,7 @@ class SourceMapsTest < MiniTest::Test
         }
       }, {
         "offset" => {
-          "line" => 57,
+          "line" => 56,
           "column" => 0
         },
         "map" => {
