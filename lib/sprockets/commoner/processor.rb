@@ -104,7 +104,7 @@ module Sprockets
           @dependencies << "commoner-environment-variable:#{env}"
         end
 
-        map = process_map(input[:metadata][:map], result['map'])
+        map = process_map(input[:metadata][:map], result['map'], input)
 
         {
           data: result['code'],
@@ -120,10 +120,10 @@ module Sprockets
       end
 
       private
-        def process_map(oldmap, map)
+        def process_map(oldmap, map, input)
           if Commoner.sprockets4?
-            map = Sprockets::SourceMapUtils.decode_vlq_mappings(map['mappings'], sources: map['sources'], names: map['names'])
-            map = Sprockets::SourceMapUtils.combine_source_maps(oldmap, map)
+            formatted_map = Sprockets::SourceMapUtils.format_source_map(map, input)
+            Sprockets::SourceMapUtils.combine_source_maps(oldmap, formatted_map)
           end
         end
 
