@@ -35,7 +35,14 @@ var __commoner_initialize_module__ = function(f) {
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
+
+if (typeof window !== 'undefined') {
+  global = window;
+} else if (typeof global !== 'undefined') {
+  global = global;
+} else {
+  global = this;
+}
 JS
 
       OUTRO = <<-JS.freeze
