@@ -16,13 +16,12 @@ class StubTest < MiniTest::Test
   def test_stub
     assert asset = @env['vendor-stub.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 var __commoner_helper__interopRequireDefault = function (obj) {
   return obj && obj.__esModule ? obj : {
     default: obj
@@ -41,7 +40,7 @@ var __commoner_module__vendor_stub$admin$whatever_js = __commoner_initialize_mod
   });
 });
 var __commoner_module__vendor_stub$index_js = {};
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
 JS
   end
 end

@@ -29,17 +29,16 @@ function(helpers, globalIdentifiers) {
 JS
 
       PRELUDE = <<-JS.freeze
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 JS
 
       OUTRO = <<-JS.freeze
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
 JS
       def initialize(root)
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)

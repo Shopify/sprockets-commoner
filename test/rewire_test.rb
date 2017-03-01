@@ -9,13 +9,12 @@ class RewireTest < MiniTest::Test
   def test_just_js
     assert asset = @env['scripts.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 var __commoner_helper__createClass = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
@@ -82,20 +81,19 @@ var __commoner_module__scripts$index_js = __commoner_initialize_module__(functio
 
   var _module2 = __commoner_helper__interopRequireDefault(__commoner_module__scripts$module_js);
 });
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
     JS
   end
 
   def test_load_file
     assert asset = @env['arrow.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 var __commoner_helper__interopRequireDefault = function (obj) {
   return obj && obj.__esModule ? obj : {
     default: obj
@@ -124,20 +122,19 @@ var __commoner_module__arrow$index_js = __commoner_initialize_module__(function 
 
   console.log(a(_extra2.default));
 });
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
 JS
   end
 
   def test_from_coffee
     assert asset = @env['coffee-first.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 
 (function() {
   window.A = 1;
@@ -160,7 +157,7 @@ var __commoner_module__coffee_first$included_js = __commoner_initialize_module__
   console.log(window.Included);
 
 }).call(this);
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
     JS
   end
 
@@ -170,7 +167,7 @@ var __commoner_module__coffee_first$included_js = __commoner_initialize_module__
 
     assert asset = @env['arrow.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function(){var t=function(t){var n={exports:{}};return t.call(n.exports,n,n.exports),n.exports},n=(window,function(t){return t&&t.__esModule?t:{"default":t}});(function(){window.Whatever=2}).call(this);t(function(t,e){"use strict";var o=n(window.Whatever);console.log(o["default"])}),t(function(t,e){"use strict";var o=n(window.Whatever),r=function(t){return t*t};console.log(r(o["default"]))})}();
+!function(e){var n=function(e){var n={exports:{}};return e.call(n.exports,n,n.exports),n.exports},t=function(e){return e&&e.__esModule?e:{\"default\":e}};(function(){window.Whatever=2}).call(this);n(function(e,n){\"use strict\";var o=t(window.Whatever);console.log(o[\"default\"])}),n(function(e,n){\"use strict\";var o=t(window.Whatever),r=function(e){return e*e};console.log(r(o[\"default\"]))})}(\"undefined\"!=typeof global?global:\"undefined\"!=typeof window?window:this);
 JS
   ensure
     @env.js_compressor = old_compressor
@@ -179,13 +176,12 @@ JS
   def test_require_self_js
     assert asset = @env['scripts-require_self.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 var __commoner_helper__createClass = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
@@ -252,7 +248,7 @@ var __commoner_module__scripts_require_self$index_js = __commoner_initialize_mod
 
   var _module2 = __commoner_helper__interopRequireDefault(__commoner_module__scripts_require_self$module_js);
 });
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
     JS
   end
 end
