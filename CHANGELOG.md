@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.4
+
+* Add support for ExecJS.
+
 ## v0.6.2
 
 * Add support for Sprockets 4
