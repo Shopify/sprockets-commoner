@@ -9,13 +9,12 @@ class JSONTest < MiniTest::Test
   def test_import_json
     assert asset = @env['import-json.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 
 var __commoner_module__import_json$data_json = __commoner_initialize_module__(function (module, exports) {
   module.exports = {
@@ -25,7 +24,7 @@ var __commoner_module__import_json$data_json = __commoner_initialize_module__(fu
 var __commoner_module__import_json$index_js = __commoner_initialize_module__(function (module, exports) {
   console.log(__commoner_module__import_json$data_json.extra_info);
 });
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
 JS
   end
 end

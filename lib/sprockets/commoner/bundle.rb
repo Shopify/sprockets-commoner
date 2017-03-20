@@ -29,17 +29,16 @@ function(helpers, globalIdentifiers) {
 JS
 
       PRELUDE = <<-JS.freeze
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 JS
 
       OUTRO = <<-JS.freeze
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
 JS
       def initialize(root)
         super(root, 'NODE_PATH' => JS_PACKAGE_PATH)
@@ -63,10 +62,10 @@ JS
         assets_missing = input[:metadata][:commoner_required] - assets_in_bundle
 
         global_identifiers = assets_missing.map do |filename|
-          uri, _ = if Sprockets::VERSION < '4'
-            env.resolve(filename, accept: input[:content_type], pipeline: :self, compat: false)
-          else
+          uri, _ = if Commoner.sprockets4?
             env.resolve(filename, accept: input[:content_type], pipeline: :self)
+          else
+            env.resolve(filename, accept: input[:content_type], pipeline: :self, compat: false)
           end
           asset = env.load(uri)
           # Retrieve the global variable the file is exposed through
@@ -86,9 +85,17 @@ JS
       private
 
       def shift_map(map, offset)
-        map && map.map do |m|
-          m.merge(generated: [m[:generated][0] + offset, m[:generated][1]])
-        end
+        return unless map && Commoner.sprockets4?
+        index_map = Sprockets::SourceMapUtils.make_index_map(map)
+        index_map.merge({
+          "sections" => index_map["sections"].map { |section|
+            section.merge({
+              "offset" => section["offset"].merge({
+                "line" => section["offset"]["line"] + offset
+              })
+            })
+          }
+        })
       end
     end
   end

@@ -17,7 +17,7 @@
 ### Requirements
 
 1. Ruby v2+.
-2. Rails/Any other application that uses Sprockets.
+2. Rails 4+/Any other application that uses Sprockets 3+.
 2. NPM v3+. We only support version 3 because commoner doesn't do any sort of deduplication of dependencies, so you could end up with a huge bundle if you don't want out. We only test against version 3, so you will definitely run into issues when running version 2.
 3. We recommend and support version 4+ of Node.js.
 
@@ -37,7 +37,7 @@ console.log(_.map([1, 2, 3], function(n) { return n * 3; }));
 ### Enabling Babel transforms
 
 1. Install any Babel plugins or presets you want to use. We'll use the default ES2015 preset; `npm install babel-preset-es2015`.
-1. Add a `.babelrc` with you required configuration. We just need to do `echo '{presets: ["es2015"]}' > .babelrc`.
+1. Add a `.babelrc` with you required configuration. We just need to do `echo '{"presets": ["es2015"]}' > .babelrc`.
 1. Use any feature you want! For example, let's use `import` and arrow functions in our `application.js`:
 
 ```javascript
