@@ -9,13 +9,12 @@ class ReactTest < MiniTest::Test
   def test_react
     assert asset = @env['react.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function() {
+!function(global) {
 var __commoner_initialize_module__ = function(f) {
   var module = {exports: {}};
   f.call(module.exports, module, module.exports);
   return module.exports;
 };
-var global = window;
 
 var __commoner_module__react$render_jsx = __commoner_initialize_module__(function (module, exports) {
   ReactDOM.render(React.createElement(
@@ -25,7 +24,7 @@ var __commoner_module__react$render_jsx = __commoner_initialize_module__(functio
   ), document.getElementById('root'));
 });
 var __commoner_module__react$index_js = {};
-}();
+}(typeof global != 'undefined' ? global : typeof window != 'undefined' ? window : this);
 JS
   end
 end
