@@ -99,7 +99,7 @@ module.exports = function (context) {
   function findExpose(directives) {
     var result = void 0;
     for (var i = 0; i < directives.length; i++) {
-      if (result = /^expose ([A-Za-z\.]+)$/.exec(directives[i].value.value)) {
+      if (result = /^expose ([A-Za-z\._]+)$/.exec(directives[i].value.value)) {
         directives.splice(i, 1);
         return result[1];
       }
