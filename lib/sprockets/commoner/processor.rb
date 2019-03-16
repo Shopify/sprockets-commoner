@@ -13,24 +13,15 @@ module Sprockets
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
       ALLOWED_EXTENSIONS = /\.js(?:on)?(?:\.erb)?\z/
 
-      dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal'
+      dependencies babel: '@babel/core', commoner: 'babel-plugin-sprockets-commoner-internal'
 
       method :version, 'function() { return babel.version; }'
       method :transform, %q{function(code, opts, commonerOpts) {
   try {
-    var file = new babel.File(opts);
-
-    // The actual helpers are generated in bundle.rb
-    file.set("helperGenerator", function(name) { return babel.types.identifier('__commoner_helper__' + name); });
-
-    var commonerPlugin = babel.OptionManager.normalisePlugin(commoner);
-    file.buildPluginsForOptions({plugins: [[commonerPlugin, commonerOpts]]});
-
-    return file.wrap(code, function () {
-      file.addCode(code);
-      file.parseCode(code);
-      return file.transform();
-    });
+    if (opts.moduleRoot === null) {
+      opts.moduleRoot = undefined;
+    }
+    return babel.transformSync(code, opts);
   } catch (err) {
     if (err.codeFrame != null) {
       err.message += "\n";
@@ -88,19 +79,19 @@ module Sprockets
         result = transform(input[:data], options(input), commoner_options(input))
 
         commoner_required = Set.new(input[:metadata][:commoner_required])
-        result['metadata']['targetsToProcess'].each do |t|
+        result['metadata']&.dig('targetsToProcess')&.each do |t|
           unless should_process?(t)
             raise ExcludedFileError, "#{t} was imported from #{filename} but this file won't be processed by Sprockets::Commoner"
           end
           commoner_required.add(t)
         end
 
-        result['metadata']['required'].each do |r|
+        result['metadata']&.dig('required')&.each do |r|
           asset = resolve(r, accept: input[:content_type], pipeline: :self)
           @required.insert(insertion_index, asset)
         end
 
-        result['metadata']['includedEnvironmentVariables'].each do |env|
+        result['metadata']&.dig('includedEnvironmentVariables')&.each do |env|
           @dependencies << "commoner-environment-variable:#{env}"
         end
 
@@ -112,10 +103,10 @@ module Sprockets
           required: Set.new(@required),
           map: map,
 
-          commoner_global_identifier: result['metadata']['globalIdentifier'],
+          commoner_global_identifier: result['metadata']&.dig('globalIdentifier'),
           commoner_required: commoner_required,
-          commoner_used_helpers: Set.new(input[:metadata][:commoner_used_helpers]) + result['metadata']['usedHelpers'],
-          commoner_enabled: input[:metadata][:commoner_enabled] | result['metadata']['commonerEnabled'],
+          commoner_used_helpers: Set.new(input[:metadata][:commoner_used_helpers]), #+ result['metadata']&.dig('usedHelpers'),
+          commoner_enabled: input[:metadata][:commoner_enabled] | result['metadata']&.dig('commonerEnabled'),
         }
       end
 
@@ -128,10 +119,9 @@ module Sprockets
         end
 
         def compute_cache_key
-          package_file = File.join(@root, 'node_modules', 'babel-core', 'package.json')
+          package_file = File.join(@root, 'node_modules', '@babel/core', 'package.json')
           raise Schmooze::DependencyError, 'Cannot determine babel version as babel-core has not been installed' unless File.exist?(package_file)
           package = JSON.parse(File.read(package_file))
-
           [
             self.class.name,
             VERSION,
