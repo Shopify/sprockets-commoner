@@ -167,7 +167,7 @@ var __commoner_module__coffee_first$included_js = __commoner_initialize_module__
 
     assert asset = @env['arrow.js']
     assert_equal <<-JS.chomp, asset.to_s.chomp
-!function(e){var n=function(e){var n={exports:{}};return e.call(n.exports,n,n.exports),n.exports},t=function(e){return e&&e.__esModule?e:{\"default\":e}};(function(){window.Whatever=2}).call(this);n(function(e,n){\"use strict\";var o=t(window.Whatever);console.log(o[\"default\"])}),n(function(e,n){\"use strict\";var o=t(window.Whatever),r=function(e){return e*e};console.log(r(o[\"default\"]))})}(\"undefined\"!=typeof global?global:\"undefined\"!=typeof window?window:this);
+!function(){var e=function(e){var n={exports:{}};return e.call(n.exports,n,n.exports),n.exports},o=function(e){return e&&e.__esModule?e:{"default":e}};(function(){window.Whatever=2}).call(this);e(function(){"use strict";var e=o(window.Whatever);console.log(e["default"])}),e(function(){"use strict";var e=o(window.Whatever),n=function n(e){return e*e};console.log(n(e["default"]))})}("undefined"!=typeof global?global:"undefined"!=typeof window&&window);
 JS
   ensure
     @env.js_compressor = old_compressor
