@@ -1,24 +1,25 @@
 var path    = require('path');
 var fs      = require('fs');
 var assert  = require('assert');
-var babel   = require('babel-core');
-var plugin = require('../');
+var babel   = require('@babel/core');
+var plugin = require.resolve('../');
 
 function trim(str) {
   return str.replace(/^\s+|\s+$/, '');
 }
 
 describe('babel-plugin-sprockets-commoner-internal', function() {
-  function transform(path, sourceRoot, options) {
-    var file = new babel.File({filename: path, sourceRoot: sourceRoot || __dirname, metadata: true});
-    var commonerPlugin = babel.OptionManager.normalisePlugin(plugin);
-    file.buildPluginsForOptions({plugins: [[commonerPlugin, options]]});
-    var code = fs.readFileSync(path, 'utf8');
-    return file.wrap(code, function () {
-      file.addCode(code);
-      file.parseCode(code);
-      return file.transform();
+  function transform(aPath, sourceRoot, options) {
+    var code = fs.readFileSync(aPath, 'utf8');
+    const result = babel.transformSync(code, {
+      filename: aPath,
+      sourceRoot: sourceRoot,
+      plugins: [
+        [plugin, options],
+      ],
     });
+
+    return result;
   }
 
   var fixturesDir = path.join(__dirname, 'fixtures');
@@ -53,7 +54,7 @@ describe('babel-plugin-sprockets-commoner-internal', function() {
   });
 
   var errorsDir = path.join(__dirname, 'errors');
-
+  
   fs.readdirSync(errorsDir).map(function(caseName) {
     var errorDir = path.join(errorsDir, caseName);
 

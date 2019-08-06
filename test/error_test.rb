@@ -11,7 +11,8 @@ class ErrorTest < MiniTest::Test
       @env['typo.js'].to_s
     end
     assert_equal <<-ERROR.strip, error.message.strip
-#{File.join(__dir__, 'fixtures', 'typo', 'index.js')}: Unexpected token (1:4)
+#{File.join(__dir__, 'fixtures', 'typo', 'index.js')}: Unexpected keyword 'default' (1:4)
+
 > 1 | var default = a;
     |     ^
   2 |

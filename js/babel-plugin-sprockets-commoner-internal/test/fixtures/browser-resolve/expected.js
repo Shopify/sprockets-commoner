@@ -1,5 +1,5 @@
 var __commoner_module__actual_js = __commoner_initialize_module__(function (module, exports) {
-  'use strict';
+  "use strict";
 
   var _shimmed2 = _interopRequireDefault(__commoner_module__shimmed_browser_js);
 

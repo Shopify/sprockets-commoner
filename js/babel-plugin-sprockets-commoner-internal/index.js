@@ -256,7 +256,7 @@ module.exports = function (context) {
           var identifier = pathToIdentifier(state.file.opts.filename.replace(rootRegex, ''));
           var expose = findExpose(node.directives);
           if (expose != null) {
-            node.body.push(exposeTemplate(t.identifier(expose)));
+            node.body.push(exposeTemplate([t.identifier(expose)]));
             state.file.metadata.globalIdentifier = expose;
           }
 

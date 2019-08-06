@@ -8,9 +8,9 @@ module Sprockets
 
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
 
-      dependencies generator: 'babel-generator.default',
-        babelHelpers: 'babel-helpers',
-        t: 'babel-types',
+      dependencies generator: '@babel/generator.default',
+        babelHelpers: '@babel/helpers',
+        t: '@babel/types',
         pathToIdentifier: 'babel-plugin-sprockets-commoner-internal/path-to-identifier'
 
       method :generate_header, <<-JS

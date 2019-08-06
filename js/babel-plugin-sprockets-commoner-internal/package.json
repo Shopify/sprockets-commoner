@@ -6,7 +6,7 @@
     "test": "NODE_ENV=test mocha"
   },
   "devDependencies": {
-    "babel-core": "^6.2.1",
+    "@babel/core": "^7",
     "babel-plugin-transform-es2015-arrow-functions": "^6.5.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.2.1",
     "mocha": "^6.2.0"

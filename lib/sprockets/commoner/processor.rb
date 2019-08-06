@@ -13,32 +13,21 @@ module Sprockets
       JS_PACKAGE_PATH = File.expand_path('../../../js', __dir__)
       ALLOWED_EXTENSIONS = /\.js(?:on)?(?:\.erb)?\z/
 
-      dependencies babel: 'babel-core', commoner: 'babel-plugin-sprockets-commoner-internal'
+      dependencies babel: '@babel/core', commoner: 'babel-plugin-sprockets-commoner-internal'
 
       method :version, 'function() { return babel.version; }'
-      method :transform, %q{function(code, opts, commonerOpts) {
-  try {
-    var file = new babel.File(opts);
-
-    // The actual helpers are generated in bundle.rb
-    file.set("helperGenerator", function(name) { return babel.types.identifier('__commoner_helper__' + name); });
-
-    var commonerPlugin = babel.OptionManager.normalisePlugin(commoner);
-    file.buildPluginsForOptions({plugins: [[commonerPlugin, commonerOpts]]});
-
-    return file.wrap(code, function () {
-      file.addCode(code);
-      file.parseCode(code);
-      return file.transform();
-    });
-  } catch (err) {
-    if (err.codeFrame != null) {
-      err.message += "\n";
-      err.message += err.codeFrame;
+      
+      method :transform, %q{  function transform(code, options, commonerOptions) {        
+        const result = babel.transformSync(code, {
+          filename: options.filename,
+          sourceRoot: options.sourceRoot,
+          plugins: [
+            [commoner, commonerOptions],
+          ]
+        });
+        return result;
+      }
     }
-    throw err;
-  }
-}}
       def self.instance(env)
         @instance ||= new(env.root)
       end
@@ -128,8 +117,8 @@ module Sprockets
         end
 
         def compute_cache_key
-          package_file = File.join(@root, 'node_modules', 'babel-core', 'package.json')
-          raise Schmooze::DependencyError, 'Cannot determine babel version as babel-core has not been installed' unless File.exist?(package_file)
+          package_file = File.join(@root, 'node_modules', '@babel/core', 'package.json')
+          raise Schmooze::DependencyError, 'Cannot determine babel version as @babel/core has not been installed' unless File.exist?(package_file)
           package = JSON.parse(File.read(package_file))
 
           [
