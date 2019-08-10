@@ -9,6 +9,6 @@
     "babel-core": "^6.2.1",
     "babel-plugin-transform-es2015-arrow-functions": "^6.5.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.2.1",
-    "mocha": "^2.3.4"
+    "mocha": "^6.2.0"
   }
 }
