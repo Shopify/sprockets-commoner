@@ -3,7 +3,7 @@ name: sprockets-commoner
 type: ruby
 
 up:
-  - ruby: 2.6.3
+  - ruby: 2.5.0
   - node:
       version: v8.12.0
       yarn: 1.12.3
