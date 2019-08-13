@@ -1,7 +1,6 @@
 {
   "private": true,
   "dependencies": {
-    "@babel/core": "^7",
-    "babel-preset-es2015": "*"
+    "@babel/core": "^7"
   }
 }

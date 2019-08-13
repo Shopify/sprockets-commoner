@@ -103,7 +103,7 @@ module Sprockets
 
           commoner_global_identifier: result['metadata']['globalIdentifier'],
           commoner_required: commoner_required,
-          commoner_used_helpers: Set.new(input[:metadata][:commoner_used_helpers]) + result['metadata']['usedHelpers'],
+          commoner_used_helpers: Set.new(input[:metadata][:commoner_used_helpers]) + (result['metadata']['usedHelpers'] || []),
           commoner_enabled: input[:metadata][:commoner_enabled] | result['metadata']['commonerEnabled'],
         }
       end
@@ -111,8 +111,8 @@ module Sprockets
       private
         def process_map(oldmap, map, input)
           if Commoner.sprockets4?
-            formatted_map = Sprockets::SourceMapUtils.format_source_map(map, input)
-            Sprockets::SourceMapUtils.combine_source_maps(oldmap, formatted_map)
+#            formatted_map = Sprockets::SourceMapUtils.format_source_map(map, input)
+#            Sprockets::SourceMapUtils.combine_source_maps(oldmap, formatted_map)
           end
         end
 
