@@ -1,5 +1,16 @@
 # Sprockets::Commoner
 
+### ⚠️ A note on this fork
+
+This fork has been created in order to continue support for applications that have upgraded from `babel-core` to `@babel/core`. Perhaps you've installed `@babel/core` directly, or perhaps it's being managed by sewing-kit.
+
+However! It is also important to know that this fork has **dropped** support for bundling content. Which means that if you have an `import` or `require` statement in your Javascript code, it will no longer be resolved and bundled by this package. If you use polaris-rails, it's possible that you were relying on this as a side-effect without realizing it because this package was installed as a side-effect of polaris-rails.
+
+If you are no longer installing `babel-core` (because sewing-kit tells you not
+to) you **must now find a new method for resolving these import statements**.
+
+An example has been written up in https://github.com/Shopify/services-db/pull/6210
+
 ### ⚠️ This gem is unmaintained. I advise you to use [Webpacker](https://github.com/rails/webpacker) in any new project ⚠️
 
 `Sprockets::Commoner` is a gem that enables JavaScript package and Babel transformation in Sprockets. It is meant as a replacement for [Browserify](http://browserify.org/) or [Webpack](https://webpack.github.io/) in Rails.
