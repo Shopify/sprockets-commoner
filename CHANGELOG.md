@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.5
+
+* Add file to follow `Bundler.require` convention.
+
 ## v0.6.4
 
 * Add support for ExecJS.
