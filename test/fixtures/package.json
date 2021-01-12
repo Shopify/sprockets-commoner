@@ -2,6 +2,7 @@
   "private": true,
   "dependencies": {
     "babel-core": "6.9.1",
-    "babel-preset-es2015": "6.9.0"
+    "babel-preset-es2015": "6.9.0",
+    "babel-preset-react": "^6.16.0"
   }
 }
